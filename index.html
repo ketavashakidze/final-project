@@ -8,27 +8,52 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header id="home ">
         <div class="box">
             <div class="nav">
-                <h1 class="title">Hotel</h2>
+                <h1 class="title">Santa Caterina</h2>
                 <ul class="nav-ul">
-                    <li class="nav-li" ><a class="nav-a active" href="index.html ">Home</a></li>
-                    <li class="nav-li"><a href="#">Rooms&Suites</a></li>
-                    <li class="nav-li"><a href="#">Restaurants&Bars</a></li>
-                    <li class="nav-li"><a href="#">Contact</a></li>
+                    <li class="nav-li" ><a href="#home">Home</a></li>
+                    <li class="nav-li"> <a href="#services">Services</a></li>
+                    <li class="nav-li"><a href="#Rooms">Rooms&Suites</a></li>
+                    <li class="nav-li"><a href="#restaurants">Restaurants&Bars</a></li>
+                    <li class="nav-li"><a href="#contact">Contact</a></li>
                     
                 </ul>
-
+             
+            </div>
+            <div>
+                <p>Embark on the vacation of a lifetime </p>
             </div>
             <div>
                 <p class="paragraph"> IMMERSE YOURSELF BETWEEN THE SKY AND THE SEA OF ​​THE AMALFI COAST</p>
             </div>
         </div>
     </header>
-    <section>
+   
+    <!-- about us -->
+    <section >
+        <div class="aboutus">
+            <div class="aboutus-text">
+            <h4 class="aboutus-title">about us</h4>
+            <h2 class="title2">IMMERSE YOURSEL FBETWEEN THE SKY AND THE SEA </h2>
+            <p class="aboutus-paragraph">A luxury five-star hotel retreat with two private beaches and excellent leisure facilities, we invite you to lie back, relax and savour the moment. With an idyllic location in Paradise Bay, we offer a seductive blend of style, serenity and five-star comfort. With award-winning restaurants, relaxing spa and your choice of lifestyle apartments, rooms, suites and villas. </p>
+
+            </div>
+            <div class="aboutus-img">
+                <img class="aboutus-img1" src="images/award1.png" alt="image">
+                <img class="aboutus-img1" src="images/award 2.png" alt="image">
+                <img  class="aboutus-img1" src="images/award 3.png" alt="image">
+               <img src="images/award4.png" alt="image">
+            </div>
+        </div>  
+
+    </section>
+     <!-- booking -->
+     <section>
         <form class="booking">
             <div class="input">
                 <div class="input-form">
@@ -56,29 +81,15 @@
                 
         </form>
     </section>
-    <section >
-        <div class="aboutus">
-            <div class="aboutus-text">
-            <h4>about us</h4>
-            <h2>IMMERSE YOURSEL FBETWEEN THE SKY AND THE SEA </h2>
-            <p>A luxury five-star hotel retreat with two private beaches and excellent leisure facilities, we invite you to lie back, relax and savour the moment. With an idyllic location in Paradise Bay, we offer a seductive blend of style, serenity and five-star comfort. With award-winning restaurants, relaxing spa and your choice of lifestyle apartments, rooms, suites and villas, Mandarin Oriental, Bodrum is the leading hideaway resort </p>
-
-            </div>
-            <div class="aboutus-img">
-                <img src="images/award1.png" alt="image">
-                <img src="images/award 2.png" alt="image">
-                <img src="images/award 3.png" alt="image">
-               <img src="images/award4.png" alt="image">
-            </div>
-        </div>  
-
-    </section>
     <!-- services -->
-    <section>
+    <section id="services">
+        
+            <div class="service-title">
        
-               <h2>services</h2>
-
-        <div class="services">
+               <h2 class="title3">services</h2>
+             </div>
+             
+             <div class="services">
              
            <div class="service">
                
@@ -90,36 +101,36 @@
            </div>
         </div>
            <div class="service">
-            <i class = "fas fa-swimming-pool"></i>
+            <i class = "fas fa-swimming-pool service-icon"></i>
             <div>
-            <h2>Spa&Wellness</h2>
-            <p>As in all areas of our hotel, hygiene and sanitation measures continue at the highest level in the Spa and health areas.Spread over two levels, our world-class spa enjoys a wonderfully nurturing atmosphere, enhanced by our excellent facilities and uplifting views over the Aegean Sea</p>
+            <h2 class="service-name">Spa&Wellness</h2>
+            <p class="text"> As in all areas of our hotel, hygiene and sanitation measures continue at the highest level in the Spa and health areas.Spread over two levels, our world-class spa enjoys a wonderfully nurturing atmosphere, enhanced by our excellent facilities and uplifting views over the Aegean Sea</p>
            </div>
            </div>
            </div>
            <div class="services-section2">
            <div class="service1">
-            <i class = "fas fa-broom"></i>
+            <i class = "fas fa-broom service-icon"></i>
             <div>
-            <h2>houskeeping</h2>
-            <p>Rooms are thoroughly cleaned and disinfected after every stay.
+            <h2 class="service-name">houskeeping</h2>
+            <p class="text">Rooms are thoroughly cleaned and disinfected after every stay.
                 Towels are changed on request.
                 Guests are given the option of when and whether they would like their room serviced
                 Digitized hotel information provided to guest via e-mail</p>
            </div>
         </div>
            <div class="service1">
-               <i class = "fas fa-door-closed"></i>
+               <i class = "fas fa-door-closed service-icon"></i>
                <div>
-               <h2>security</h2>
-               <p>Hotel Guest room Security locks can be a critical aspect of guest protection. Locks and locking systems are needed which lend themselves to the smooth and efficient operation of the property, but which are not easily compromised.</p>
+               <h2 class="service-name">security</h2>
+               <p class="text">Hotel Guest room Security locks can be a critical aspect of guest protection. Locks and locking systems are needed which lend themselves to the smooth and efficient operation of the property, but which are not easily compromised.</p>
            </div>
         </div>
         </div>
        </section>
        <!-- end of services -->
        <!-- rooms -->
-       <section>
+       <section id="rooms">
         <div class="container">
            <h2>rooms</h2>
            
@@ -127,23 +138,109 @@
                <img src="images/img1.jpg" alt="bedroom image">
                <div class="text-box">
                <h3>STANDART ROOM</h3>
+               <ul>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+            </ul>
                <P class="room-text">With our Standard Room, you will have everything you need for a comfortable stay and a good night’s sleep. Enjoy the large bed, in-room coffee and tea facilities, and free Wi-Fi. Other services include a magnifying mirror and a hairdryer. Choose between double or twin beds.
 
             </P>
         </div>
            </div>
            <div class="rooms">
-               <img src="images/img2.jpg" alt="bedroom image">
+               
+               <div class="text-box">
                <h3>SUPERIOR ROOM </h3>
+               <ul>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+            </ul>
                <p class="room-text">For extra space, book one of our Superior Rooms. With the in-room espresso machine, there’s no reason to wait for your first cup of coffee. Everything you need is already in the room. Whether you prefer twin, queen, or king beds, we guarantee an exceptional level of comfort.</p>
            </div>
+           <img src="images/img2.jpg" alt="bedroom image">
+        </div>
            <div class="rooms">
                <img src="images/img3.jpg" alt="bedroom image">
+               <div class="text-box">
                <h3>PREMIUM ROOM</h3>
+               <ul>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+                <li>
+                    <i class = "fas fa-arrow-alt-circle-right"></i>
+                    Lorem ipsum dolor sit amet.
+                </li>
+            </ul>
                <p class="room-text">Our Premium Rooms are ideal if you enjoy spacious surroundings. They include the same amenities as the Superior Rooms, while also offering more space for extra comfort.</p>
            </div>
         </div>
+        </div>
        </section>
+       
+       <!-- restaurants -->
+       <section id="restaurants">
+        <div>
+           <div>
+               <div>
+                   <h2>RESTAURANTS&BARS</h2>
+               </div>
+               <img src="images/94_b.jpg" alt="restaurant image">
+               <div>
+                   <h2>GLICINE RESTAURANT</h2>
+                   <p>Awarded a Michelin Star by Michelin Guide 2020, offers a panoramic terrace with a breath-taking view.
+                    A new fine dining concept, proposes a cuisine focused on local recipes and Mediterranean flavours, proposing balanced, elegant and innovative dishes.</p>
+               </div>
+           </div>
+            <div>
+                <div>
+                    <h2>LA TERRAZZA BAR</h2>
+                    <p>Whether for an aperitif amongst friends, a light snack before heading to the beach, or a romantic after dinner drink it seems the most natural thing in the world to enjoy these leisurely moments with its welcoming environment  and vast selection of cocktails and home-made lemon liqueurs, served with an inviting selection of warm and cold canapés.</p>
+                </div>
+                <img src="images/resto.jpg" alt="restaurant image">
+            </div>
+            <div>
+                <img src="images/night.jpg" alt="restaurant image">
+                <div>
+                    <h2>RESTAURANT AL MARE</h2>
+                    <p>lunch and dinner are served also at the Beach Club’s Restaurant Al Mare, restaurant positioned on a perched terrace Fresh grilled fish and fragrant pizzas cooked in the traditional wood burning oven are the specialties of an informal meal, surrounded by the spectacular scenery </p>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h2>WINE CELLAR</h2>
+                    <p>Santa Caterina's well stocked wine cellar will delight lovers of Bacchus' favorite tipple, with its excellent selection of all the most highly acclaimed regional, Italian and international wines, wines to be savored as an accompaniment to the chef's specialties or to take home either as a gift or as a souvenir of the pleasurable moments</p>
+                </div>
+                <img src="images/wine.jpg" alt="image">
+            </div>
+        </div>
+       </section>
+       contact
        
             
     

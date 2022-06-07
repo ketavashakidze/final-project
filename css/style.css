@@ -1,30 +1,41 @@
 /*header*/
 .nav {display: flex;justify-content: space-between;background-color:white; height: 50px;position: fixed;width: 100%;}
 .nav-ul {display: flex;}
-.nav-li {margin-right: 70px;}
-.box {background-image: url(../images/home-masthead-1.jpg);width:100%;height: 500px;}
-/*section 1*/
-
-.booking{ display: flex;justify-content: center;align-items: center;width: 800px; margin: 0 auto;margin-top: 50px;}
-.input{ background:cadetblue;  display: flex; justify-content: center;align-items: center;height:100px ;border-color: #E8E8E8 ; color: #CECECE;margin-bottom: 16px;}
-.button {width: 150px;height: 50px;  background-color: #5863F8; color: white;}
+.nav-li {margin-right: 70px; font-size: 20px;margin-top: 10px; color: #121212;}
+.box {background-image: url(../images/home-masthead-1.jpg);width:100%;height:550px;}
+.title {font-family: 'Parisienne', cursive; font-size: 35px; margin-top: 10px;}
+.paragraph {font-size: 20px; margin-bottom: 550px;}
+/*section 2*/
+.booking {background-image: url(../images/Santa-Caterina-Italy.webp);width: 100%;height:150px ;}
+.booking{ display: flex;justify-content: center;align-items: center; margin: 0 auto;margin-top: 50px;}
+.input{;  display: flex; justify-content: center;align-items: center;height:100px ;border-color : #E8E8E8 ; color: #CECECE;margin-bottom: 16px;}
+.button {width: 150px;height: 50px;  background-color: #ffb5b5; color: white;}
 .input_form {height: 50px;width: 300px;}
 
+/*section1*/
+.aboutus {width: 1104px;height: 560px;margin: 0 auto;display: flex;margin-top: 40px;;}
+.aboutus-text {width: 500px;margin-right:90px;}
+.aboutus-title {font-size: 20px;margin-bottom: 20px; color: #5585b5;}
+.title2 {font-size: 30px;margin-bottom: 15px;}
+.aboutus-paragraph {font-size: 20px;}
+.aboutus-img1 {margin-right: 20px;margin-bottom: 20px;}
 
-/*section2*/
-.aboutus {width: 1104px;height: 560px;margin: 0 auto;background-color: aqua;display: flex;;}
-.aboutus-text {width: 445px;height: 390;}
 /* services */
 .service {display: flex;width:400px;}
-.services {width: 1200px;display: flex;justify-content: center; margin: 0 auto ;}
-.service1 {display: flex;width: 500px;}
-.services-section2  {width: 1200px;display: flex;justify-content: center; margin: 0 auto ;}
-.text {width: 300px;}
+.services {width: 1100px;display: flex;justify-content: space-between; margin: 0 auto ;margin-top: 20px;}
+.service1 {display: flex;width: 400px;}
+.services-section2  {width: 1100px;display: flex;justify-content:space-between; margin: 0 auto ;}
+.text {width: 500px;font-size: 20px; margin-bottom: 30px;}
+.title3 { font-size: 20px; color: #5585b5;}
+.service-name { margin-top: 10px; margin-bottom: 30px;font-size: 40px;}
+.service-icon {font-size: 40px; margin-top: 10px;margin-bottom: 30px;margin-right: 10px;}
+.service-title {width: 1100px;margin: 0 auto; margin-top: 70px;}
 
 /* rooms */
 .rooms {display: flex;}
-.room-text {width: 500px;}
+.room-text {width: 500px; color: white; font-size: 30px;}
 .container {width: 1300px; margin: 0 auto;}
+.text-box {width: 600px;height: 600px;background-color:#363636;}
 
 
 /*footer*/

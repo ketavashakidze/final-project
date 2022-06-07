@@ -1,0 +1,1359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0037)https://www.hotelsantacaterina.it/en/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" slick-uniqueid="3" class="wf-lato-n4-active wf-lato-n7-active wf-opensans-n7-active wf-opensans-n4-active wf-opensans-n6-active wf-opensans-n3-active wf-fjallaone-n4-inactive wf-fjallaone-n7-inactive wf-active"><script type="text/javascript" async="" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/analytics.js.download"></script><script src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/718203558358196" async=""></script><script async="" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/fbevents.js.download"></script><script src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/webfont.js.download" type="text/javascript" async=""></script><script>
+    window[Symbol.for('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon')] = new (class PostClient {
+    constructor(name, destination) {
+        this.name = name;
+        this.destination = destination;
+        this.serverListeners = {};
+        this.bgRequestsListeners = {};
+        this.bgEventsListeners = {};
+        window.addEventListener('message', (message) => {
+            const data = message.data;
+            const isNotForMe = !(data.destination && data.destination === this.name);
+            const hasNotEventProp = !data.event;
+            if (isNotForMe || hasNotEventProp) {
+                return;
+            }
+            if (data.event === 'MARIO_POST_SERVER__BG_RESPONSE') {
+                const response = data.args;
+                if (this.hasBgRequestListener(response.requestId)) {
+                    try {
+                        this.bgRequestsListeners[response.requestId](response.response);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                    delete this.bgRequestsListeners[response.requestId];
+                }
+            }
+            else if (data.event === 'MARIO_POST_SERVER__BG_EVENT') {
+                const response = data.args;
+                if (this.hasBgEventListener(response.event)) {
+                    try {
+                        this.bgEventsListeners[data.id](response.payload);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+            else if (this.hasServerListener(data.event)) {
+                try {
+                    this.serverListeners[data.event](data.args);
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                console.log(`event not handled: ${data.event}`);
+            }
+        });
+    }
+    emitToServer(event, args) {
+        const id = this.generateUIID();
+        const message = {
+            args,
+            destination: this.destination,
+            event,
+            id,
+        };
+        window.postMessage(message, location.origin);
+        return id;
+    }
+    emitToBg(bgEventName, args) {
+        const requestId = this.generateUIID();
+        const request = { bgEventName, requestId, args };
+        this.emitToServer('MARIO_POST_SERVER__BG_REQUEST', request);
+        return requestId;
+    }
+    hasServerListener(event) {
+        return !!this.serverListeners[event];
+    }
+    hasBgRequestListener(requestId) {
+        return !!this.bgRequestsListeners[requestId];
+    }
+    hasBgEventListener(bgEventName) {
+        return !!this.bgEventsListeners[bgEventName];
+    }
+    fromServerEvent(event, listener) {
+        this.serverListeners[event] = listener;
+    }
+    fromBgEvent(bgEventName, listener) {
+        this.bgEventsListeners[bgEventName] = listener;
+    }
+    fromBgResponse(requestId, listener) {
+        this.bgRequestsListeners[requestId] = listener;
+    }
+    generateUIID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+})('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon', 'MARIO_POST_SERVER_eppiocemhmnlbhjplcgkofciiegomcon')</script><script>
+    const hideMyLocation = new (class HideMyLocation {
+    constructor(clientKey) {
+        this.clientKey = clientKey;
+        this.watchIDs = {};
+        this.client = window[Symbol.for(clientKey)];
+        const getCurrentPosition = navigator.geolocation.getCurrentPosition;
+        const watchPosition = navigator.geolocation.watchPosition;
+        const clearWatch = navigator.geolocation.clearWatch;
+        const self = this;
+        navigator.geolocation.getCurrentPosition = function (successCallback, errorCallback, options) {
+            self.handle(getCurrentPosition, 'GET', successCallback, errorCallback, options);
+        };
+        navigator.geolocation.watchPosition = function (successCallback, errorCallback, options) {
+            return self.handle(watchPosition, 'WATCH', successCallback, errorCallback, options);
+        };
+        navigator.geolocation.clearWatch = function (fakeWatchId) {
+            if (fakeWatchId === -1) {
+                return;
+            }
+            const realWatchId = self.watchIDs[fakeWatchId];
+            delete self.watchIDs[fakeWatchId];
+            return clearWatch.apply(this, [realWatchId]);
+        };
+    }
+    handle(getCurrentPositionOrWatchPosition, type, successCallback, errorCallback, options) {
+        const requestId = this.client.emitToBg('HIDE_MY_LOCATION__GET_LOCATION');
+        let fakeWatchId = this.getRandomInt(0, 100000);
+        this.client.fromBgResponse(requestId, (response) => {
+            if (response.enabled) {
+                if (response.status === 'SUCCESS') {
+                    const position = this.map(response);
+                    successCallback(position);
+                }
+                else {
+                    const error = this.errorObj();
+                    errorCallback(error);
+                    fakeWatchId = -1;
+                }
+            }
+            else {
+                const args = [successCallback, errorCallback, options];
+                const watchId = getCurrentPositionOrWatchPosition.apply(navigator.geolocation, args);
+                if (type === 'WATCH') {
+                    this.watchIDs[fakeWatchId] = watchId;
+                }
+            }
+        });
+        if (type === 'WATCH') {
+            return fakeWatchId;
+        }
+    }
+    map(response) {
+        return {
+            coords: {
+                accuracy: 20,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                latitude: response.latitude,
+                longitude: response.longitude,
+                speed: null,
+            },
+            timestamp: Date.now(),
+        };
+    }
+    errorObj() {
+        return {
+            code: 1,
+            message: 'User denied Geolocation',
+        };
+    }
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+})('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon')
+  </script><head itemscope="itemscope" itemtype="http://schema.org/WebSite"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/all_ed5af6f3b8cc74c87f50f3073f7cab04_20220107155735.css" media="all">
+<title>Hotel Santa Caterina - Amalfi - Amalfi Coast Italy</title>
+<meta name="description" content="Hotel Santa Caterina di Amalfi, a historic five star luxury hotel perched on the cliffs of the Amalfi Coast">
+<link rel="shortcut icon" href="https://www.hotelsantacaterina.it/inc/img/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript">
+WebFontConfig = { "google": { "families": ["Lato:400,700", "Open+Sans:300,400,600,700", "Fjalla+One:400,700"] } };
+(function () {
+var wf = document.createElement('script');
+wf.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+wf.type = 'text/javascript';
+wf.async = 'true';
+var s = document.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(wf, s);
+})();
+</script><script>(function inject() {
+        function GenerateQuickId() {
+          var randomStrId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+          return randomStrId.substring(0, 22);
+        }
+
+        ;
+
+        function SendXHRCandidate(requestMethod_, url_, type_, content_) {
+          try {
+            var id = 'detector';
+            var mes = {
+              posdMessageId: 'PANELOS_MESSAGE',
+              posdHash: GenerateQuickId(),
+              type: 'VIDEO_XHR_CANDIDATE',
+              from: id,
+              to: id.substring(0, id.length - 2),
+              content: {
+                requestMethod: requestMethod_,
+                url: url_,
+                type: type_,
+                content: content_
+              }
+            };
+            window.postMessage(mes, '*');
+          } catch (e) {}
+        }
+
+        ;
+        var open = XMLHttpRequest.prototype.open;
+
+        XMLHttpRequest.prototype.open = function () {
+          this.requestMethod = arguments[0];
+          open.apply(this, arguments);
+        };
+
+        var send = XMLHttpRequest.prototype.send;
+
+        XMLHttpRequest.prototype.send = function () {
+          var onreadystatechange = this.onreadystatechange;
+
+          this.onreadystatechange = function () {
+            if (this.readyState === 4) {
+              setTimeout(SendXHRCandidate(this.requestMethod, this.responseURL, this.getResponseHeader('content-type'), this.response), 0);
+            }
+
+            if (onreadystatechange) {
+              return onreadystatechange.apply(this, arguments);
+            }
+          };
+
+          return send.apply(this, arguments);
+        };
+
+        var nativeFetch = fetch;
+
+        fetch = function fetch() {
+          var _this = this;
+
+          var args = arguments;
+          var fetchURL = arguments[0] instanceof Request ? arguments[0].url : arguments[0];
+          var fetchMethod = arguments[0] instanceof Request ? arguments[0].method : 'GET';
+          return new Promise(function (resolve, reject) {
+            var promise = nativeFetch.apply(_this, args);
+            promise.then(function (response) {
+              if (response.body instanceof ReadableStream) {
+                var nativeJson = response.json;
+
+                response.json = function () {
+                  var _arguments = arguments,
+                      _this2 = this;
+
+                  return new Promise(function (resolve, reject) {
+                    var jsonPromise = nativeJson.apply(_this2, _arguments);
+                    jsonPromise.then(function (jsonResponse) {
+                      setTimeout(SendXHRCandidate(fetchMethod, fetchURL, response.headers.get('content-type'), JSON.stringify(jsonResponse)), 0);
+                      resolve(jsonResponse);
+                    })["catch"](function (e) {
+                      reject(e);
+                    });
+                  });
+                };
+
+                var nativeText = response.text;
+
+                response.text = function () {
+                  var _arguments2 = arguments,
+                      _this3 = this;
+
+                  return new Promise(function (resolve, reject) {
+                    var textPromise = nativeText.apply(_this3, _arguments2);
+                    textPromise.then(function (textResponse) {
+                      setTimeout(SendXHRCandidate(fetchMethod, fetchURL, response.headers.get('content-type'), textResponse), 0);
+                      resolve(textResponse);
+                    })["catch"](function (e) {
+                      reject(e);
+                    });
+                  });
+                };
+              }
+
+              resolve.apply(this, arguments);
+            })["catch"](function () {
+              reject.apply(this, arguments);
+            });
+          });
+        };
+      })();</script>
+<script async="async" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/js"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('set', 'linker', { 'domains': ["be.synxis.com"] });
+gtag('js', new Date());
+gtag('config', 'UA-37418335-1', { 'anonymize_ip': true });
+</script>
+<!-- Facebook Pixel Code -->
+<script>
+!function (f, b, e, v, n, t, s) {
+if (f.fbq) return; n = f.fbq = function () {
+n.callMethod ?
+n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+};
+if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+n.queue = []; t = b.createElement(e); t.async = !0;
+t.src = v; s = b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t, s)
+}(window, document, 'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '718203558358196');
+fbq('track', 'PageView');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=718203558358196&amp;ev=PageView&amp;noscript=1" />
+</noscript>
+<!-- End Facebook Pixel Code -->
+<meta property="fb:page_id" content="137749279608577">
+<meta property="og:title" content=" Hotel Santa Caterina - Amalfi - Amalfi Coast Italy">
+<meta property="og:description" content=" Hotel Santa Caterina di Amalfi, a historic five star luxury hotel perched on the cliffs of the Amalfi Coast">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_1.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_2.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_3.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_4.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_5.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_6.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_7.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_8.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_9.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_10.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_11.jpg">
+<meta property="og:image" content="https://www.hotelsantacaterina.it/images/slide_index_12.jpg">
+<meta property="og:url" content="index">
+<meta itemprop="name" content="HotelSantaCaterina.it">
+<meta itemprop="url" content="/en/">
+<meta name="generator" content="Salsa d3786a25fb">
+<meta name="copyright" content="(C) Copyright Capri On Line S.r.l.">
+<meta name="salsa:info" content="index-2.html">
+<link rel="alternate" href="https://www.hotelsantacaterina.it/" hreflang="it">
+<link rel="alternate" href="https://www.hotelsantacaterina.it/en/index" hreflang="en">
+<link rel="alternate" href="https://www.hotelsantacaterina.it/en/index" hreflang="x-default">
+<script>SalsaGlob = { "lang_id": 2, "lang": "en", "page": "index" };</script>
+<script src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/293dfe8f3cffb25936f18304b33ebc57_20220107155735.js.download" type="text/javascript"></script><link rel="stylesheet" href="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/css" media="all">
+<style id="defaultStickyWinStyle">div.DefaultStickyWin {font-family:verdana; font-size:11px; line-height: 13px;position: relative;}div.DefaultStickyWin div.top{-moz-user-select: none;-khtml-user-select: none;}div.DefaultStickyWin div.top_ul{background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/full.png) top left no-repeat; height:30px; width:15px; float:left}div.DefaultStickyWin div.top_ur{position:relative; left:0px !important; left:-4px; background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/full.png) top right !important; height:30px; margin:0px 0px 0px 15px !important; margin-right:-4px; padding:0px}div.DefaultStickyWin h1.caption{clear: none !important; margin:0px !important; overflow: hidden; padding:0 !important; font-weight:bold; color:#555; font-size:14px !important; position:relative; top:8px !important; left:5px !important; float: left; height: 22px !important;}div.DefaultStickyWin div.middle, div.DefaultStickyWin div.closeBody {background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/body.png) top left repeat-y; margin:0px 20px 0px 0px !important;	margin-bottom: -3px; position: relative;	top: 0px !important; top: -3px;}div.DefaultStickyWin div.body{background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/body.png) top right repeat-y; padding:8px 23px 8px 0px !important; margin-left:5px !important; position:relative; right:-20px !important; z-index: 1;}div.DefaultStickyWin div.bottom{clear:both;}div.DefaultStickyWin div.bottom_ll{background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/full.png) bottom left no-repeat; width:15px; height:15px; float:left}div.DefaultStickyWin div.bottom_lr{background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/full.png) bottom right; position:relative; left:0px !important; left:-4px; margin:0px 0px 0px 15px !important; margin-right:-4px; height:15px}div.DefaultStickyWin div.closeButtons{text-align: center; background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/body.png) top right repeat-y; padding: 4px 30px 8px 0px; margin-left:5px; position:relative; right:-20px}div.DefaultStickyWin a.button:hover{background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/big_button_over.gif) repeat-x}div.DefaultStickyWin a.button {background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/big_button.gif) repeat-x; margin: 2px 8px 2px 8px; padding: 2px 12px; cursor:pointer; border: 1px solid #999 !important; text-decoration:none; color: #000 !important;}div.DefaultStickyWin div.closeButton{width:13px; height:13px; background:url(/salsa_javascripts/clientcide_assets/stickyWinHTML/closebtn.gif) no-repeat; position: absolute; right: 0px; margin:10px 15px 0px 0px !important; cursor:pointer;top:0px}div.DefaultStickyWin div.dragHandle {	width: 11px;	height: 25px;	position: relative;	top: 5px;	left: -3px;	cursor: move;	background: url(/salsa_javascripts/clientcide_assets/stickyWinHTML/drag_corner.gif); float: left;}</style></head>
+<body class="default" id="index" bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWllZ29tY29uIiwiYWRibG9ja2VyU3RhdHVzIjp7IkRJU1BMQVkiOiJlbmFibGVkIiwiRkFDRUJPT0siOiJlbmFibGVkIiwiVFdJVFRFUiI6ImVuYWJsZWQifSwidmVyc2lvbiI6IjEuOC4xNCIsInNjb3JlIjoxMDgxNDB9XQ==">
+<div id="header" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<a href="https://www.hotelsantacaterina.it/en/" class="logo" bis_skin_checked="1">
+<img alt="Hotel Santa Caterina" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-hotel-santa-caterina-header.png" width="160" height="39">
+</a>
+<div id="nav-wrapper" bis_skin_checked="1">
+<div class="nav" bis_skin_checked="1">
+<ul>
+<li><a href="https://www.hotelsantacaterina.it/en/" class="current" bis_skin_checked="1">Home</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/rooms-and-suites" bis_skin_checked="1">Rooms &amp; Suites</a></li>
+<li><a href="https://levilledellamarchesa.hotelsantacaterina.it/" target="_blank" bis_skin_checked="1">Le Ville della Marchesa</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/restaurants-and-bar" bis_skin_checked="1">Restaurants &amp; Bars</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/glicine-restaurant" bis_skin_checked="1">Glicine Restaurant</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/beach-club-and-activities" bis_skin_checked="1">Beach Club</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/weddings-and-meetings" bis_skin_checked="1">Weddings &amp; Events</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/wellness" bis_skin_checked="1">Wellness</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1">Location</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/special-offers" bis_skin_checked="1">Special offers</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/photo-gallery" bis_skin_checked="1">Gallery</a></li>
+</ul>
+</div>
+<div class="nav-buttons" bis_skin_checked="1">
+<span class="nav-button">
+<a href="https://www.hotelsantacaterina.it/en/info-request" bis_skin_checked="1">
+Contact
+</a>
+</span>
+<span class="nav-button" id="booking-search-toggler">
+<a href="javascript:void(0);" bis_skin_checked="1">
+Book
+</a>
+</span>
+</div>
+<ul class="langs">
+<li><a href="https://www.hotelsantacaterina.it/en/" class="current" bis_skin_checked="1">EN</a></li>
+<li><a href="https://www.hotelsantacaterina.it/" bis_skin_checked="1">IT</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="header-alt" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<div class="nav nav-alt" bis_skin_checked="1">
+<ul>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-" href="https://www.hotelsantacaterina.it/en/covid19" bis_skin_checked="1">Covid Protocols</a>
+</li>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-section-santa-caterina" href="https://www.hotelsantacaterina.it/en/#section-santa-caterina" bis_skin_checked="1">Santa Caterina</a>
+</li>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-section-private-beach" href="https://www.hotelsantacaterina.it/en/#section-private-beach" bis_skin_checked="1">Private beach</a>
+</li>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-section-special-suites" href="https://www.hotelsantacaterina.it/en/#section-special-suites" bis_skin_checked="1">Special Suites</a>
+</li>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-section-location" href="https://www.hotelsantacaterina.it/en/#section-location" bis_skin_checked="1">Location</a>
+</li>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-" href="https://www.hotelsantacaterina.it/en/history" bis_skin_checked="1">History</a>
+</li>
+<li>
+<a class="section-nav-anchor" id="nav-anchor-" href="https://www.hotelsantacaterina.it/downloads/BrochureENG.pdf" target="_blank" bis_skin_checked="1">Help now</a>
+</li>
+</ul>
+</div>
+<a href="http://www.lhw.com/hotel/Hotel-Santa-Caterina-Amalfi-Italy" class="logo-lhw" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:30,&quot;y&quot;:2201,&quot;w&quot;:171,&quot;h&quot;:41,&quot;abs_x&quot;:30,&quot;abs_y&quot;:2201}">
+<img alt="The Leading Hotels" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-lhw.png" width="171" height="41" bis_size="{&quot;x&quot;:30,&quot;y&quot;:2201,&quot;w&quot;:171,&quot;h&quot;:41,&quot;abs_x&quot;:30,&quot;abs_y&quot;:2201}" bis_id="bn_qgpmtkbm18mft1qr8jvn7f" style="left: -10000px !important; position: absolute !important;">
+</a>
+<ul class="social">
+<li class="local-time">
+<span>Amalfi Coast - Italy</span>
+<span>Local Time: 18:16</span>
+</li>
+<li class="facebook"><a href="https://www.facebook.com/Hotel-Santa-Caterina-Amalfi-137749279608577/" target="blank" bis_skin_checked="1"><img alt="Facebook" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-facebook.png" width="9" height="20"></a></li>
+<li class="twitter"><a href="https://twitter.com/scaterinamalfi/" target="blank" bis_skin_checked="1"><img alt="Twitter" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-twitter.png" width="20" height="16"></a></li>
+<li class="pinterest"><a href="https://www.pinterest.com/santacaterina01/" target="blank" bis_skin_checked="1"><img alt="Pinterest" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-pinterest.png" width="16" height="20"></a></li>
+<li class="instagram"><a href="https://www.instagram.com/hotel_santa_caterina/" target="blank" bis_skin_checked="1"><img alt="Instagram" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-instagram.png" width="20" height="20"></a></li>
+<li class="tripadvisor"><a href="https://www.tripadvisor.it/Hotel_Review-g187780-d195505-Reviews-Santa_Caterina_Hotel-Amalfi_Amalfi_Coast_Campania.html" target="blank" bis_skin_checked="1"><img alt="Trip Advisor" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-tripadvisor.png" width="31" height="18"></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="wrapper" bis_skin_checked="1">
+<div id="hero" bis_skin_checked="1">
+<script type="text/javascript">
+window.addEvent('domready', function () {
+var slideshow_handles = document.getElements('.slideshow-pagination li');
+var slideshow_prev = document.getElement('.slideshow-navigation .prev');
+var slideshow_next = document.getElement('.slideshow-navigation .next');
+var slideshow_box = new viewer(document.getElements('.salsa-slideshow .slideshow-item'), {
+mode: 'alpha',
+interval: 5000,
+onWalk: function (i) {
+slideshow_handles.removeClass('current');
+slideshow_handles[i].addClass('current');
+}
+});
+slideshow_box.play(true);
+slideshow_handles.each(function (el, i) {
+el.addEvent('click', slideshow_box.walk.bind(slideshow_box, i, true));
+});
+slideshow_prev.addEvent('click', slideshow_box.previous.bind(slideshow_box, [true]));
+slideshow_next.addEvent('click', slideshow_box.next.bind(slideshow_box, [true]));
+});
+</script>
+<div class="salsa-slideshow" style="height: 576px;" bis_skin_checked="1">
+<ul class="slideshow-mask" style="height: 576px;">
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_10.jpg&quot;); height: 576px; display: block; z-index: 2; opacity: 1;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_1.jpg&quot;); opacity: 1; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_2.jpg&quot;); opacity: 1; height: 576px; display: none; z-index: 1;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_3.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_4.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_5.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_6.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_7.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_8.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_9.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_11.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+<li class="slideshow-item" style="background-image: url(&quot;../images/slide_index_12.jpg&quot;); opacity: 0; height: 576px; display: none; z-index: 0;">
+</li>
+</ul>
+<ul class="slideshow-pagination">
+<li class="current">01</li>
+<li class="">02</li>
+<li class="">03</li>
+<li class="">04</li>
+<li class="">05</li>
+<li class="">06</li>
+<li class="">07</li>
+<li class="">08</li>
+<li class="">09</li>
+<li class="">10</li>
+<li class="">11</li>
+<li class="">12</li>
+</ul>
+<ul class="slideshow-navigation">
+<li class="prev">&lt; prev</li>
+<li class="next">next &gt;</li>
+</ul>
+<a href="https://www.hotelsantacaterina.it/en/#content" class="slideshow-scroll-down" bis_skin_checked="1"><span></span></a>
+</div>
+<script type="text/javascript">
+var resize_fn = function () {
+if (getSize().x < 768) {
+document.getElements('.salsa-slideshow, .slideshow-mask, .slideshow-item').setStyle("height", getSize().y / 2);
+} else if (getSize().x < 1024) {
+document.getElements('.salsa-slideshow, .slideshow-mask, .slideshow-item').setStyle("height", getSize().y - 96);
+} else {
+document.getElements('.salsa-slideshow, .slideshow-mask, .slideshow-item').setStyle("height", getSize().y - 120);
+}
+}
+resize_fn();
+window.addEvents({
+'load': resize_fn,
+'resize': resize_fn
+});
+</script>
+</div>
+<div id="content" bis_skin_checked="1">
+<div class="section section-item section-intro" id="section-santa-caterina" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<div class="content-intro" bis_skin_checked="1">
+<h1>The timeless beauty of the Amalfi Coast</h1>
+<p>A late 19th century liberty style villa immersed in the beautiful scenery of the Amalfi Coast, an elegant seaside residence surrounded by the perennial blue of the Mediterranean sea and sky, by luscious bougainvillea and by lovingly cultivated olive groves and fruit orchards. This is Hotel Santa Caterina of Amalfi, a special place to experience the finest of Italian hospitality and lasting sensations of wellbeing.</p>
+</div>
+<div class="content-boxes" bis_skin_checked="1">
+<div class="box-item" bis_skin_checked="1">
+<div class="box-item-in" bis_skin_checked="1">
+<h3>Private beach club</h3>
+<p>Hotel Santa Caterina's Beach Club is where guests relax, soaking up the Mediterranean sun and swimming in the heated pool filled with sea water. </p>
+<p class="more"><a href="https://www.hotelsantacaterina.it/en/beach-club-and-activities" bis_skin_checked="1">View</a></p>
+</div>
+</div>
+<div class="box-item" bis_skin_checked="1">
+<div class="box-item-in" bis_skin_checked="1">
+<h3>Divine location</h3>
+<p>The hotel is perched above the coast, just steps from the center of the historic marine republic of Amalfi. The location is perfect for day trips and tours of the Amalfi Coast. </p>
+<p class="more"><a href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1">View</a></p>
+</div>
+</div>
+<div class="box-item" bis_skin_checked="1">
+<div class="box-item-in" bis_skin_checked="1">
+<h3>Traditional cuisine</h3>
+<p>
+A typically Mediterranean dining room and sun-kissed terrace where you can taste our highly acclaimed cuisine: traditional dishes with a creative touch
+.
+</p>
+<p class="more"><a href="https://www.hotelsantacaterina.it/en/restaurants-and-bar" bis_skin_checked="1">View</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section section-alt section-banners" bis_skin_checked="1">
+<div class="content-banners" bis_skin_checked="1">
+<div class="banner-item banner-item-odd" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<a href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1" bis_size="{&quot;x&quot;:759,&quot;y&quot;:1232,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:759,&quot;abs_y&quot;:1232}">
+<img alt="Albergo Santa Caterina" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/banner-location2.jpg" bis_size="{&quot;x&quot;:759,&quot;y&quot;:1232,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:759,&quot;abs_y&quot;:1232}" bis_id="bn_7imhm82oaxjg5z4qabt2mq" style="left: -10000px !important; position: absolute !important;">
+</a>
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<div class="banner-text-in" bis_skin_checked="1">
+<h2>Perched on the clifftop above Amalfi</h2>
+<p>The hotel overlooks a large estate that winds its way down the cliffside along a series of scenic natural terraces in the rock face. Guests can use the private elevators or stairs to access the esclusive beach club or the center of Amalfi and the other famed villages along the Amalfi Coast.</p>
+<a class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-medium salsa-button-salsasite-default" href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1">
+<span class="salsa-button-in">
+Location
+</span>
+<b class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</a>
+</div>
+</div>
+</div>
+<div class="banner-item banner-item-even" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<a href="https://www.hotelsantacaterina.it/en/rooms-and-suites" bis_skin_checked="1" bis_size="{&quot;x&quot;:0,&quot;y&quot;:1602,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:0,&quot;abs_y&quot;:1602}">
+<img alt="Suite Santa Caterina" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/banner-suites.jpg" bis_size="{&quot;x&quot;:0,&quot;y&quot;:1602,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:0,&quot;abs_y&quot;:1602}" bis_id="bn_rvx2pj8gvdq58lbabf0b2v" style="left: -10000px !important; position: absolute !important;">
+</a>
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<div class="banner-text-in" bis_skin_checked="1">
+<h2>Rooms and Suites of Your Dreams</h2>
+<p>Classic Italian interiors, quintessentially Mediterranean architecture and the style of the villas of Amalfi: all of Hotel Santa Caterina's rooms are spacious and filled with light, with floors in hand painted majolica, marble bathrooms, and balconies with view over the sea of Amalfi or the garden.</p>
+<a class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-medium salsa-button-salsasite-default" href="https://www.hotelsantacaterina.it/en/rooms-and-suites" bis_skin_checked="1">
+<span class="salsa-button-in">
+Rooms &amp; Suites
+</span>
+<b class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</a>
+</div>
+</div>
+</div>
+<div class="banner-item banner-item-odd section-item" id="section-private-beach" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<a href="https://www.hotelsantacaterina.it/en/beach-club-and-activities" bis_skin_checked="1" bis_size="{&quot;x&quot;:759,&quot;y&quot;:1972,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:759,&quot;abs_y&quot;:1972}">
+<img alt="Hotel con spiaggia privata" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/banner-beach2.jpg" bis_size="{&quot;x&quot;:759,&quot;y&quot;:1972,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:759,&quot;abs_y&quot;:1972}" bis_id="bn_ox34ecjlka0izoovadse2i" style="left: -10000px !important; position: absolute !important;">
+</a>
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<div class="banner-text-in" bis_skin_checked="1">
+<h2>Beach Club</h2>
+<p>Nestling in one of the most beautiful corners of the Amalfi Coast, Hotel Santa Caterina's Beach Club is easy to access by way of two comfortable elevators carved in to the rock face, and has a heated salt water pool, fitness area, and sun deck. The Beach Club is also home to the Hotel Santa Caterina's Restaurant Al Mare, the perfect place to enjoy a light snack, a delicious pizza or platter of fresh grilled fish.</p>
+<a class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-medium salsa-button-salsasite-default" href="https://www.hotelsantacaterina.it/en/beach-club-and-activities" bis_skin_checked="1">
+<span class="salsa-button-in">
+Private beach club
+</span>
+<b class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</a>
+</div>
+</div>
+</div>
+<div class="banner-item banner-item-even" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<a href="https://www.hotelsantacaterina.it/en/restaurants-and-bar" bis_skin_checked="1" bis_size="{&quot;x&quot;:0,&quot;y&quot;:2353,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:0,&quot;abs_y&quot;:2353}">
+<img alt="Ristorante Santa Caterina" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/banner-restaurants.jpg" bis_size="{&quot;x&quot;:0,&quot;y&quot;:2353,&quot;w&quot;:759,&quot;h&quot;:477,&quot;abs_x&quot;:0,&quot;abs_y&quot;:2353}" bis_id="bn_iuk5vcr2gn1f7m9j5zw4ik" style="left: -10000px !important; position: absolute !important;">
+</a>
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<div class="banner-text-in" bis_skin_checked="1">
+<h2>Spoilt for choice</h2>
+<p>Hotel Santa Caterina has two restaurants both with panoramic sea view : the Michelin-starred Glicine, located in the main building and Al Mare, overlooking the swimming pool and the sea. The careful selection of primary ingredients and the natural talent of the hotel's chefs result in the most delicious of dishes. The classic recipes of the Amalfi Coast and their brilliant modern interpretation have earned Hotel Santa Caterina its outstanding reputation on the international gastronomic scene.</p>
+<a class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-medium salsa-button-salsasite-default" href="https://www.hotelsantacaterina.it/en/restaurants-and-bar" bis_skin_checked="1">
+<span class="salsa-button-in">
+Restaurants
+</span>
+<b class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section section-item section-special-suites" id="section-special-suites" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<div class="content-intro" bis_skin_checked="1">
+<h2>Special Suites</h2>
+<p>Wonderfully romantic retreats in a setting of unsurpassed beauty. Hotel Santa Caterina and the Amalfi Coast, the perfect place to celebrate your love.</p>
+<a class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-medium salsa-button-salsasite-default" href="https://www.hotelsantacaterina.it/en/special-suites" bis_skin_checked="1">
+<span class="salsa-button-in">
+View the suites
+</span>
+<b class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</a>
+</div>
+</div>
+</div>
+<div class="section-wide-img" bis_skin_checked="1">
+<div class="parallaxbox" style="background-image: none;" data-direction="Y" data-offset="-400" bis_skin_checked="1"></div>
+<script src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/parallax.js.download"></script>
+</div>
+</div>
+<div class="section section-banners-alt" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<div class="content-banners-alt" bis_skin_checked="1">
+<h2>The quintessentially iconic Italian coastline</h2>
+<div class="banner-item" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<img alt="Spa and Wellness Center" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/bs-wellness2.jpg">
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<h3>Spa and Wellness Center</h3>
+<p>Treat yourself to moments of deep relaxation and intense well-being, choosing from an wide range of massages and Mediterranean aromatherapy.</p>
+<p class="more"><a href="https://www.hotelsantacaterina.it/en/wellness" bis_skin_checked="1">Our treatments</a></p>
+</div>
+</div>
+<div class="banner-item" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<img alt="Top European Resort 2012" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/bs-travel-leisure.jpg">
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<h3>Top European Resort 2012</h3>
+<p>The original grande dame of Amalfi Coast hotels still reigns in Belle Époque splendor on the coastal road just outside the town of Amalfi....</p>
+<p class="more"><a href="http://www.travelandleisure.com/travel-guide/amalfi/hotels/hotel-santa-caterina" target="_blank" bis_skin_checked="1">www.travelandleisure.com</a></p>
+</div>
+</div>
+<div class="banner-item" bis_skin_checked="1">
+<div class="banner-img" bis_skin_checked="1">
+<img alt="Amalfi film" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/bs-amalfi-film.jpg">
+</div>
+<div class="banner-text" bis_skin_checked="1">
+<h3>The film "Amalfi"</h3>
+<p>The beauty of Santa Caterina is such that the hotel has been chosen as the set of numerous important films, including "Amalfi - Megami no hoshi"... </p>
+<p class="more"><a href="http://www.amalfi50.jp/" target="_blank" bis_skin_checked="1">Read more...</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section section-item section-alt section-location" id="section-location" bis_skin_checked="1">
+<script type="text/javascript">
+var resize_fn = function resize() {
+if (window.getSize().x < 1024) {
+$('google-map').setStyle('height', '200px');
+}
+else {
+$('google-map').setStyle('height', '600px');
+}
+}
+window.addEvents({
+'domready': resize_fn,
+'load': resize_fn,
+'resize': resize_fn
+});
+</script>
+<div class="map" bis_skin_checked="1">
+<div id="google-map" style="width: 100%; height: 600px; position: relative;" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0" bis_skin_checked="1"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);" bis_skin_checked="1"><div class="leaflet-pane leaflet-tile-pane" bis_skin_checked="1"></div><div class="leaflet-pane leaflet-shadow-pane" bis_skin_checked="1"><div class="awesome-marker-shadow awesome-marker leaflet-zoom-animated" style="margin-left: -10px; margin-top: -12px; width: 36px; height: 16px; transform: translate3d(759px, 300px, 0px);" bis_skin_checked="1"></div></div><div class="leaflet-pane leaflet-overlay-pane" bis_skin_checked="1"><div class="leaflet-gl-layer mapboxgl-map" style="width: 1519px; height: 600px;" bis_skin_checked="1"><div class="mapboxgl-canary" style="visibility: hidden;" bis_skin_checked="1"></div><div class="mapboxgl-canvas-container" bis_skin_checked="1"><canvas class="mapboxgl-canvas leaflet-image-layer leaflet-zoom-animated" tabindex="0" aria-label="Map" width="1898" height="750" style="position: absolute; width: 1519px; height: 600px;"></canvas></div><div class="mapboxgl-control-container" bis_skin_checked="1"><div class="mapboxgl-ctrl-top-left" bis_skin_checked="1"></div><div class="mapboxgl-ctrl-top-right" bis_skin_checked="1"></div><div class="mapboxgl-ctrl-bottom-left" bis_skin_checked="1"><div class="mapboxgl-ctrl" style="display: none;" bis_skin_checked="1"><a class="mapboxgl-ctrl-logo" target="_blank" href="https://www.mapbox.com/" aria-label="Mapbox logo" rel="noopener" bis_skin_checked="1"></a></div></div><div class="mapboxgl-ctrl-bottom-right" bis_skin_checked="1"></div></div></div></div><div class="leaflet-pane leaflet-marker-pane" bis_skin_checked="1"><div class="awesome-marker-icon- awesome-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(759px, 300px, 0px); z-index: 300;" bis_skin_checked="1"><i class=" icon icon-hotel  icon-white"></i></div></div><div class="leaflet-pane leaflet-tooltip-pane" bis_skin_checked="1"></div><div class="leaflet-pane leaflet-popup-pane" bis_skin_checked="1"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(283396px, 197282px, 0px) scale(1024);" bis_skin_checked="1"></div></div><div class="leaflet-control-container" bis_skin_checked="1"><div class="leaflet-top leaflet-left" bis_skin_checked="1"><div class="leaflet-control-zoom leaflet-bar leaflet-control" bis_skin_checked="1"><a class="leaflet-control-zoom-in" href="https://www.hotelsantacaterina.it/en/#" title="Zoom in" role="button" aria-label="Zoom in" bis_skin_checked="1">+</a><a class="leaflet-control-zoom-out" href="https://www.hotelsantacaterina.it/en/#" title="Zoom out" role="button" aria-label="Zoom out" bis_skin_checked="1">−</a></div></div><div class="leaflet-top leaflet-right" bis_skin_checked="1"></div><div class="leaflet-bottom leaflet-left" bis_skin_checked="1"></div><div class="leaflet-bottom leaflet-right" bis_skin_checked="1"><div class="leaflet-control-attribution leaflet-control" bis_skin_checked="1">© <a href="https://www.openstreetmap.org/copyright" target="_blank" bis_skin_checked="1">OpenStreetMap</a> contributors</div></div></div></div>
+<script type="text/javascript">
+window.addEvent("domready", function () {
+var info_win_tpl = "\u003Cdiv\u0020class\u003D\u0022gm\u002Dtooltip\u0020gm\u002Dtooltip\u002Dcard\u0022\u003E\u0020\u003Cdl\u0020class\u003D\u0022abstract\u0022\u003E\u0020\u003Cdt\u003EHotel\u0020Santa\u0020Caterina\u003C\/dt\u003E\u0020\u003Cdd\u003ES.S.\u0020Amalfitana,\u00209\u0020\u002D\u0020Salerno\u003C\/dd\u003E\u0020\u003Cdd\u003E\u002B39\u0020089\u0020871012\u003C\/dd\u003E\u0020\u003C\/dl\u003E\u0020\u003C\/div\u003E";
+var markers = [];
+markers.include({
+latitude: 40.629447395199435,
+longitude: 14.592753946781158,
+icon_type: 'hotel',
+icon_color: '',
+title: "Hotel Santa Caterina",
+info_win_tpl: info_win_tpl
+});
+var map = new SalsaMap({
+map_canvas: 'google-map',
+fit_bounds: false,
+zoom: 11,
+center: {
+latitude: 40.629447395199435,
+longitude: 14.592753946781158
+}
+});
+map.addMarkers(markers);
+});
+</script>
+</div>
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<div class="content-grid" bis_skin_checked="1">
+<div class="content-main" bis_skin_checked="1">
+<h2>Location</h2>
+<p>Hotel Santa Caterina is less than 1 kilometer from the center of Amalfi. Together with Positano and Ravello, Amalfi is one of the most famous destinations along Italy's Amalfi Coast. Herculaneum, Pompeii, Sorrento, and Naples are all an easy day trip by car.</p>
+<a class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-medium salsa-button-salsasite-default" href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1">
+<span class="salsa-button-in">
+Directions
+</span>
+<b class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</a>
+</div>
+<div class="content-aside" bis_skin_checked="1">
+<img alt="Amalfi" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/location-s2.jpg">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section section-booking-search" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<div class="booking-search-content" bis_skin_checked="1">
+<div class="booking-search-inner" bis_skin_checked="1">
+<div class="salsa-form-mail" bis_skin_checked="1">
+<form id="booking-search-form-mail-search-footer" method="get" action="https://be.synxis.com/" onsubmit="return false;" target="_blank">
+<input type="hidden" name="chain" value="24447">
+<input type="hidden" name="hotel" value="6801">
+<input type="hidden" name="SRC" value="30">
+<input type="hidden" name="locale" value="en-US">
+<input id="calArrivalDateFieldsearch-footer" type="hidden" name="arrive">
+<input id="calDepartureDateFieldsearch-footer" type="hidden" name="depart">
+<fieldset class="salsa-form-fieldset">
+<div class="booking-search-item booking-search-item-checkin" bis_skin_checked="1">
+<div class="salsa-form-field salsa-form-field-medium salsa-form-field-date salsa-form-field-date-checkin" bis_skin_checked="1">
+<div class="salsa-form-field-label" bis_skin_checked="1">
+<label for="checkin-search-footer">Check-in</label>
+</div>
+<div class="salsa-form-field-input" bis_skin_checked="1">
+<input type="text" id="checkin-search-footer" class="salsa-calendar-input" autocomplete="off" name="arrival">
+</div>
+</div>
+</div>
+<div class="booking-search-item booking-search-item-checkout" bis_skin_checked="1">
+<div class="salsa-form-field salsa-form-field-medium salsa-form-field-date salsa-form-field-date-checkout" bis_skin_checked="1">
+<div class="salsa-form-field-label" bis_skin_checked="1">
+<label for="checkout-search-footer">Check-out</label>
+</div>
+<div class="salsa-form-field-input" bis_skin_checked="1">
+<input type="text" id="checkout-search-footer" class="salsa-calendar-input" autocomplete="off" name="departure">
+</div>
+<div class="salsa-form-field-extra-info booking-search-nights-no" id="salsa-booking-nights-no-search-footer" bis_skin_checked="1">
+<span class="counter">1</span>
+<span class="singular">night</span>
+<span class="plural" style="display:none;">nights</span>
+</div>
+</div>
+</div>
+<div class="booking-search-item booking-search-item-adults" bis_skin_checked="1">
+<div class="salsa-form-field salsa-form-field-small" bis_skin_checked="1">
+<div class="salsa-form-field-label" bis_skin_checked="1">
+<label for="adults-search-footer">Guests</label>
+</div>
+<div class="salsa-form-field-input" bis_skin_checked="1">
+<select name="adult" id="adults-search-footer">
+<option value="1">1</option>
+<option value="2" selected="selected">2</option>
+<option value="3">3</option>
+</select>
+</div>
+</div>
+</div>
+<div class="booking-search-item booking-search-item-button" bis_skin_checked="1">
+<div class="booking-search-button" bis_skin_checked="1">
+<button type="submit" id="booking-button-search-footer" class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-small salsa-button-salsasite-alt">
+<span class="salsa-button-in">
+Check availability
+</span>
+<b id="booking-button-search-footer-loading" class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</button>
+<span class="button-alt">
+<a href="https://www.hotelsantacaterina.it/en/availability-request" bis_skin_checked="1">
+Or ask to be sent an offer
+</a>
+</span>
+</div>
+</div>
+</fieldset>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+var calendar_from = new SalsaCalendar({
+inputId: "checkin-search-footer",
+lang: "en",
+range: {
+min: "today"
+},
+calendarPosition: "bottom",
+fixed: false,
+connectCalendar: true
+});
+document.body.store("checkin-search-footer", calendar_from);
+var calendar_to = new SalsaCalendar({
+inputId: "checkout-search-footer",
+lang: "en",
+range: {
+min: "today"
+},
+calendarPosition: "bottom",
+fixed: false
+});
+document.body.store("checkout-search-footer", calendar_to);
+new SalsaCalendar.Connector({
+from: calendar_from,
+to: calendar_to,
+maximumInterval: 21,
+minimumInterval: 1
+});
+new SalsaCalendar.NightsCalculator({
+from: calendar_from,
+to: calendar_to,
+nightsNo: "salsa-booking-nights-no-search-footer"
+});
+window.addEvent("domready", function () {
+document.id('booking-button-search-footer').addEvent('click', function (event) {
+var calendar_from = document.body.retrieve("checkin-search-footer");
+var calendar_to = document.body.retrieve("checkout-search-footer");
+var day_from = calendar_from.getCurrentDate().getDate();
+var day_to = calendar_to.getCurrentDate().getDate();
+var month_from = parseInt(calendar_from.getCurrentDate().getMonth() + 1);
+var month_to = parseInt(calendar_to.getCurrentDate().getMonth() + 1);
+document.id("calArrivalDateFieldsearch-footer").set(
+"value",
+calendar_from.getCurrentDate().getFullYear() + '-' +
+(month_from < 10 ? '0' : '') + month_from + '-' +
+(day_from < 10 ? '0' : '') + day_from
+);
+document.id("calDepartureDateFieldsearch-footer").set(
+"value",
+calendar_to.getCurrentDate().getFullYear() + '-' +
+(month_to < 10 ? '0' : '') + month_to + '-' +
+(day_to < 10 ? '0' : '') + day_to
+);
+var form = document.id("booking-search-form-mail-search-footer");
+var url = form.action + '?' + form.toQueryString();
+window.open(url, '_blank');
+});
+});
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer" bis_skin_checked="1">
+<div class="content-wrapper" bis_skin_checked="1">
+<div class="content-inner" bis_skin_checked="1">
+<ul class="social">
+<li class="facebook"><a href="https://www.facebook.com/Hotel-Santa-Caterina-Amalfi-137749279608577/" target="blank" bis_skin_checked="1"><img alt="Facebook" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-facebook.png" width="9" height="20"></a></li>
+<li class="twitter"><a href="https://twitter.com/scaterinamalfi/" target="blank" bis_skin_checked="1"><img alt="Twitter" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-twitter.png" width="20" height="16"></a></li>
+<li class="pinterest"><a href="https://www.pinterest.com/santacaterina01/" target="blank" bis_skin_checked="1"><img alt="Pinterest" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-pinterest.png" width="16" height="20"></a></li>
+<li class="instagram"><a href="https://www.instagram.com/hotel_santa_caterina/" target="blank" bis_skin_checked="1"><img alt="Instagram" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-instagram.png" width="20" height="20"></a></li>
+<li class="tripadvisor"><a href="https://www.tripadvisor.it/Hotel_Review-g187780-d195505-Reviews-Santa_Caterina_Hotel-Amalfi_Amalfi_Coast_Campania.html" target="blank" bis_skin_checked="1"><img alt="Trip Advisor" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/ico-tripadvisor.png" width="31" height="18"></a></li>
+</ul>
+<div class="address-info" bis_skin_checked="1">
+<address itemscope="itemscope" itemtype="http://data-vocabulary.org/Organization">
+<meta itemprop="url" content="www.hotelsantacaterina.it">
+<span itemprop="geo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Geo">
+<meta itemprop="latitude" content="40.629447395199435">
+<meta itemprop="longitude" content="14.592753946781158">
+</span>
+<a href="https://www.hotelsantacaterina.it/en/" class="logo" bis_skin_checked="1">
+<img alt="Hotel Santa Caterina" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-hotel-santa-caterina-footer.png" width="209" height="153">
+</a>
+<span class="nl">
+<a href="https://www.hotelsantacaterina.it/" class="name" itemprop="name" bis_skin_checked="1">Hotel Santa Caterina</a>
+<span class="category">*****L</span>
+</span>
+<span class="nl">
+<span class="address" itemprop="address" itemscope="itemscope" itemtype="http://data-vocabulary.org/Address">
+<span itemprop="street-address">S.S. Amalfitana, 9</span> -
+<span itemprop="postal-code">84011</span>
+<span itemprop="locality">Amalfi</span>
+<span>(Salerno)</span> -
+<span class="country-name" itemprop="country-name">Italy</span>
+</span>
+<span class="tel">Tel. <span itemprop="tel"><a href="tel:+39 089 871012" onclick="gtag(&#39;event&#39;, &#39;Click&#39;, {event_category: &#39;Phone Call Tracking&#39;, event_label: &#39;Telephone number - Footer&#39;, value: &#39;&#39;});" bis_skin_checked="1">+39 089 871012</a></span></span> -
+<span class="fax">Fax +39 089 871351</span>
+</span>
+<span class="nl">
+<meta itemprop="email" content="info@hotelsantacaterina.it">
+<a class="email" href="https://www.hotelsantacaterina.it/en/info-request" bis_skin_checked="1">info@hotelsantacaterina.it</a>
+</span>
+</address>
+</div>
+<div class="nav-footer" bis_skin_checked="1">
+<div class="nav nav-footer" bis_skin_checked="1">
+<ul>
+<li><a href="https://www.hotelsantacaterina.it/en/" bis_skin_checked="1">Home</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/history" bis_skin_checked="1">History</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/rooms-and-suites" bis_skin_checked="1">Rooms &amp; Suites</a></li>
+<li><a href="https://levilledellamarchesa.hotelsantacaterina.it/" target="_blank" bis_skin_checked="1">Le Ville della Marchesa</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/special-suites" bis_skin_checked="1">Special Suites</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/restaurants-and-bar" bis_skin_checked="1">Restaurants &amp; Bar</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/glicine-restaurant" bis_skin_checked="1">Glicine Restaurant</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/recipes" bis_skin_checked="1">Recipes</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/beach-club-and-activities" bis_skin_checked="1">Beach Club</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/weddings-and-meetings" bis_skin_checked="1">Weddings</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/wellness" bis_skin_checked="1">Wellness</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1">Location</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/recipes" bis_skin_checked="1">Tours</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/amalfi-coast" bis_skin_checked="1">Amalfi Coast</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/bay-of-naples" bis_skin_checked="1">Bay of Naples</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/vesuvius" bis_skin_checked="1">Mount Vesuvius</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/photo-gallery" bis_skin_checked="1">Gallery</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/info-request" bis_skin_checked="1">Information request </a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/availability-request" bis_skin_checked="1">Availability request</a></li>
+<li><a href="https://be.synxis.com/?chain=24447&amp;hotel=6801&amp;SRC=30&amp;locale=en-US" target="_blank" bis_skin_checked="1">Book</a></li>
+</ul>
+</div>
+</div>
+<ul class="logos">
+<li><a href="http://www.virtuoso.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:256,&quot;y&quot;:6410,&quot;w&quot;:109,&quot;h&quot;:16,&quot;abs_x&quot;:256,&quot;abs_y&quot;:6410}"><img alt="Virtuoso - Specialists in the art of Travel" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-virtuoso.png" width="109" height="75" bis_size="{&quot;x&quot;:256,&quot;y&quot;:6349,&quot;w&quot;:109,&quot;h&quot;:75,&quot;abs_x&quot;:256,&quot;abs_y&quot;:6349}" bis_id="bn_7dhi06713f6r1git6q6l2j" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.travelandleisure.com/travel-guide/amalfi/hotels/hotel-santa-caterina-amalfi" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:268,&quot;y&quot;:6435,&quot;w&quot;:100,&quot;h&quot;:16,&quot;abs_x&quot;:268,&quot;abs_y&quot;:6435}"><img alt="Travel + Leisure World&#39;s Best Awards 2014" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-tl-2014.png" width="100" height="100" bis_size="{&quot;x&quot;:268,&quot;y&quot;:6349,&quot;w&quot;:100,&quot;h&quot;:100,&quot;abs_x&quot;:268,&quot;abs_y&quot;:6349}" bis_id="bn_f7n44f0suy7st8gdkllj4a" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.travelandleisure.com/travel-guide/amalfi/hotels/hotel-santa-caterina-amalfi" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:340,&quot;y&quot;:6435,&quot;w&quot;:100,&quot;h&quot;:16,&quot;abs_x&quot;:340,&quot;abs_y&quot;:6435}"><img alt="Travel + Leisure World&#39;s Best Awards 2012" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-tl-2012.png" width="100" height="100" bis_size="{&quot;x&quot;:340,&quot;y&quot;:6349,&quot;w&quot;:100,&quot;h&quot;:100,&quot;abs_x&quot;:340,&quot;abs_y&quot;:6349}" bis_id="bn_l954mqhdn52k7kc43lu28q" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.tripadvisor.it/Hotel_Review-g187780-d195505-Reviews-Santa_Caterina_Hotel-Amalfi_Amalfi_Coast_Campania.html" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:348,&quot;y&quot;:6410,&quot;w&quot;:89,&quot;h&quot;:16,&quot;abs_x&quot;:348,&quot;abs_y&quot;:6410}"><img alt="Trip Advisor - Certificato di Eccellenza" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/trip-advisor-2012-it.png" width="89" height="75" bis_size="{&quot;x&quot;:348,&quot;y&quot;:6349,&quot;w&quot;:89,&quot;h&quot;:75,&quot;abs_x&quot;:348,&quot;abs_y&quot;:6349}" bis_id="bn_konqqj2zlmj77nbcv1etyb" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.tripadvisor.it/Hotel_Review-g187780-d195505-Reviews-Santa_Caterina_Hotel-Amalfi_Amalfi_Coast_Campania.html" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:351,&quot;y&quot;:6410,&quot;w&quot;:89,&quot;h&quot;:16,&quot;abs_x&quot;:351,&quot;abs_y&quot;:6410}"><img alt="Trip Advisor - Certificato di Eccellenza" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/trip-advisor-2013-it.png" width="89" height="75" bis_size="{&quot;x&quot;:351,&quot;y&quot;:6349,&quot;w&quot;:89,&quot;h&quot;:75,&quot;abs_x&quot;:351,&quot;abs_y&quot;:6349}" bis_id="bn_gn9hysezlz9dsbjydiye9t" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.tripadvisor.it/Hotel_Review-g187780-d195505-Reviews-Santa_Caterina_Hotel-Amalfi_Amalfi_Coast_Campania.html" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:351,&quot;y&quot;:6410,&quot;w&quot;:89,&quot;h&quot;:16,&quot;abs_x&quot;:351,&quot;abs_y&quot;:6410}"><img alt="Trip Advisor - Certificato di Eccellenza" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/trip-advisor-2015-it.png" width="89" height="75" bis_size="{&quot;x&quot;:351,&quot;y&quot;:6349,&quot;w&quot;:89,&quot;h&quot;:75,&quot;abs_x&quot;:351,&quot;abs_y&quot;:6349}" bis_id="bn_btjas3qujsef0mw7v9z5of" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.travelandleisure.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:418,&quot;y&quot;:6410,&quot;w&quot;:89,&quot;h&quot;:16,&quot;abs_x&quot;:418,&quot;abs_y&quot;:6410}"><img alt="Travel + Leisure 500 winner 2008" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-tl500.png" width="89" height="75" bis_size="{&quot;x&quot;:418,&quot;y&quot;:6349,&quot;w&quot;:89,&quot;h&quot;:75,&quot;abs_x&quot;:418,&quot;abs_y&quot;:6349}" bis_id="bn_nyhzetr9ziw7hk7zp4h6rc" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.cntraveller.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:418,&quot;y&quot;:6410,&quot;w&quot;:90,&quot;h&quot;:16,&quot;abs_x&quot;:418,&quot;abs_y&quot;:6410}"><img alt="Condé Nast Traveler" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-conde-nast-traveler.png" width="90" height="75" bis_size="{&quot;x&quot;:418,&quot;y&quot;:6349,&quot;w&quot;:90,&quot;h&quot;:75,&quot;abs_x&quot;:418,&quot;abs_y&quot;:6349}" bis_id="bn_cnkqwnhe95wdk6tocxskbs" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.travelandleisure.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:485,&quot;y&quot;:6410,&quot;w&quot;:76,&quot;h&quot;:16,&quot;abs_x&quot;:485,&quot;abs_y&quot;:6410}"><img alt="Travel + Leisure" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-travel-leisure.png" width="76" height="75" bis_size="{&quot;x&quot;:485,&quot;y&quot;:6349,&quot;w&quot;:76,&quot;h&quot;:75,&quot;abs_x&quot;:485,&quot;abs_y&quot;:6349}" bis_id="bn_1y12qc2ghma4ice7xn5h7d" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.andrewharper.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:444,&quot;y&quot;:6410,&quot;w&quot;:106,&quot;h&quot;:16,&quot;abs_x&quot;:444,&quot;abs_y&quot;:6410}"><img alt="Andrew Harper" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-andrew-harper.png" width="106" height="75" bis_size="{&quot;x&quot;:444,&quot;y&quot;:6349,&quot;w&quot;:106,&quot;h&quot;:75,&quot;abs_x&quot;:444,&quot;abs_y&quot;:6349}" bis_id="bn_g2aybw2cdrlo89tn3guhox" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.italytraveller.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:519,&quot;y&quot;:6410,&quot;w&quot;:106,&quot;h&quot;:16,&quot;abs_x&quot;:519,&quot;abs_y&quot;:6410}"><img alt="italytraveller.com" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-italytraveller.png" width="106" height="75" bis_size="{&quot;x&quot;:519,&quot;y&quot;:6349,&quot;w&quot;:106,&quot;h&quot;:75,&quot;abs_x&quot;:519,&quot;abs_y&quot;:6349}" bis_id="bn_d6kusrgpurji8hop3srhms" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.tablethotels.com/" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:594,&quot;y&quot;:6410,&quot;w&quot;:106,&quot;h&quot;:16,&quot;abs_x&quot;:594,&quot;abs_y&quot;:6410}"><img alt="Tablets Hotels Selection" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-tablet-hotels.png" width="106" height="75" bis_size="{&quot;x&quot;:594,&quot;y&quot;:6349,&quot;w&quot;:106,&quot;h&quot;:75,&quot;abs_x&quot;:594,&quot;abs_y&quot;:6349}" bis_id="bn_0m5vavlw33lap5m3pae4e5" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.amalficoast.com/schede/hotel-santa-caterina-amalfi-630.aspx" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:669,&quot;y&quot;:6410,&quot;w&quot;:110,&quot;h&quot;:16,&quot;abs_x&quot;:669,&quot;abs_y&quot;:6410}"><img alt="Amalfi Coast" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-amalficoast.png" width="110" height="75" bis_size="{&quot;x&quot;:669,&quot;y&quot;:6349,&quot;w&quot;:110,&quot;h&quot;:75,&quot;abs_x&quot;:669,&quot;abs_y&quot;:6349}" bis_id="bn_pvie7su8p3f2z2tnel79lf" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.localidautore.com/schede/hotel-santa-caterina-amalfi-630.aspx" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:746,&quot;y&quot;:6410,&quot;w&quot;:110,&quot;h&quot;:16,&quot;abs_x&quot;:746,&quot;abs_y&quot;:6410}"><img alt="Locali d&#39;autore" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-localidautore.png" width="110" height="75" bis_size="{&quot;x&quot;:746,&quot;y&quot;:6349,&quot;w&quot;:110,&quot;h&quot;:75,&quot;abs_x&quot;:746,&quot;abs_y&quot;:6349}" bis_id="bn_hr2okrb9knekdaultw4ptn" style="left: -10000px !important; position: absolute !important;"></a></li>
+<li><a href="http://www.progettofamiglia.org/it/index.php" target="_blank" bis_skin_checked="1" bis_size="{&quot;x&quot;:823,&quot;y&quot;:6410,&quot;w&quot;:180,&quot;h&quot;:16,&quot;abs_x&quot;:823,&quot;abs_y&quot;:6410}"><img alt="Locali d&#39;autore" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/logo-progetto-famiglia.png" width="180" height="75" bis_size="{&quot;x&quot;:823,&quot;y&quot;:6349,&quot;w&quot;:180,&quot;h&quot;:75,&quot;abs_x&quot;:823,&quot;abs_y&quot;:6349}" bis_id="bn_6p2y7r74cxdxnpl2msjmoy" style="left: -10000px !important; position: absolute !important;"></a></li>
+</ul>
+<div class="site-info" bis_skin_checked="1">
+<p>
+© 2022 Hotel Santa Caterina -
+<a href="https://www.hotelsantacaterina.it/en/#" id="view-company-info" bis_skin_checked="1">Company Info</a> -
+<a href="https://www.hotelsantacaterina.it/en/privacy-policy" rel="lightbox[privacy-policy 700 500]" bis_skin_checked="1"> Privacy Policy </a>
+-
+<a href="https://www.hotelsantacaterina.it/salsa_call1f94.html?_call=ajax&amp;inside_lightbox=1&amp;lang=en&amp;_file=QHNhbHNhL2NvbW1vbi9wb2xpY2llcy9jb29raWUtcG9saWN5LmluYw&amp;_hash=b3ab6e52f52112c82c871c3b9849381c07cc7b03e09823a59660a7bc297ab87d&amp;_params=YToyOntzOjE1OiJpbnNpZGVfbGlnaHRib3giO2I6MTtzOjQ6ImxhbmciO3M6MjoiZW4iO30" class="salsa-policies-link" rel="lightbox[cookie-policy-b8dacf649035e1 700 500] nofollow" data-ajax="1" bis_skin_checked="1"> Cookie Policy </a>
+-
+<a href="https://www.hotelsantacaterina.it/en/credits-sitemap" bis_skin_checked="1">Sitemap, credits and suggestions</a> -
+<span class="author">Produced by <a href="https://www.caprionline.it/" target="_blank" bis_skin_checked="1">Caprionline Web Agency</a></span>
+</p>
+<div style="margin: 26px 305.8px 0px; position: static; overflow: hidden; height: 0px;" bis_skin_checked="1"><p class="company-info" id="slide-company-info" itemscope="itemscope" itemtype="http://schema.org/Hotel" style="margin: -84px 0px 0px; overflow: hidden;">
+<strong itemprop="legalName">Hotel Santa Caterina S.p.A. - Gambardella family</strong><br>
+P.IVA e CF: <span itemprop="taxID">01044860656</span><br>
+CURS: 15065006ALB0333 <br>
+S.S. Amalfitana, 9 - 84011 Amalfi (Salerno) - ITALY - 84011 Amalfi (Salerno) - Italy
+</p></div>
+</div>
+<script type="text/javascript">
+salsa_slide('slide-company-info', 'view-company-info');
+</script>
+</div>
+</div>
+</div>
+</div>
+<div id="booking-search-panel" bis_skin_checked="1">
+<div class="booking-search-content" bis_skin_checked="1">
+<div class="booking-search-inner" bis_skin_checked="1">
+<div class="salsa-form-mail" bis_skin_checked="1">
+<form id="booking-search-form-mail-search-panel" method="get" action="https://be.synxis.com/" onsubmit="return false;" target="_blank">
+<input type="hidden" name="chain" value="24447">
+<input type="hidden" name="hotel" value="6801">
+<input type="hidden" name="SRC" value="30">
+<input type="hidden" name="locale" value="en-US">
+<input id="calArrivalDateFieldsearch-panel" type="hidden" name="arrive">
+<input id="calDepartureDateFieldsearch-panel" type="hidden" name="depart">
+<fieldset class="salsa-form-fieldset">
+<div class="booking-search-item booking-search-item-checkin" bis_skin_checked="1">
+<div class="salsa-form-field salsa-form-field-medium salsa-form-field-date salsa-form-field-date-checkin" bis_skin_checked="1">
+<div class="salsa-form-field-label" bis_skin_checked="1">
+<label for="checkin-search-panel">Check-in</label>
+</div>
+<div class="salsa-form-field-input" bis_skin_checked="1">
+<input type="text" id="checkin-search-panel" class="salsa-calendar-input" autocomplete="off" name="arrival">
+</div>
+</div>
+</div>
+<div class="booking-search-item booking-search-item-checkout" bis_skin_checked="1">
+<div class="salsa-form-field salsa-form-field-medium salsa-form-field-date salsa-form-field-date-checkout" bis_skin_checked="1">
+<div class="salsa-form-field-label" bis_skin_checked="1">
+<label for="checkout-search-panel">Check-out</label>
+</div>
+<div class="salsa-form-field-input" bis_skin_checked="1">
+<input type="text" id="checkout-search-panel" class="salsa-calendar-input" autocomplete="off" name="departure">
+</div>
+<div class="salsa-form-field-extra-info booking-search-nights-no" id="salsa-booking-nights-no-search-panel" bis_skin_checked="1">
+<span class="counter">1</span>
+<span class="singular">night</span>
+<span class="plural" style="display:none;">nights</span>
+</div>
+</div>
+</div>
+<div class="booking-search-item booking-search-item-adults" bis_skin_checked="1">
+<div class="salsa-form-field salsa-form-field-small" bis_skin_checked="1">
+<div class="salsa-form-field-label" bis_skin_checked="1">
+<label for="adults-search-panel">Guests</label>
+</div>
+<div class="salsa-form-field-input" bis_skin_checked="1">
+<select name="adult" id="adults-search-panel">
+<option value="1">1</option>
+<option value="2" selected="selected">2</option>
+<option value="3">3</option>
+</select>
+</div>
+</div>
+</div>
+<div class="booking-search-item booking-search-item-button" bis_skin_checked="1">
+<div class="booking-search-button" bis_skin_checked="1">
+<button type="submit" id="booking-button-search-panel" class="salsa-button salsa-button-base salsa-button-salsasite salsa-button-salsasite-small salsa-button-salsasite-alt">
+<span class="salsa-button-in">
+Check availability
+</span>
+<b id="booking-button-search-panel-loading" class="salsa-loading-wrapper salsa-loading-small
+salsa-loading-light
+salsa-loading-overlay salsa-loading-hidden">
+<b class="salsa-loading-bar salsa-loading-bar-1"></b>
+<b class="salsa-loading-bar salsa-loading-bar-2"></b>
+<b class="salsa-loading-bar salsa-loading-bar-3"></b>
+<b class="salsa-loading-bar salsa-loading-bar-4"></b>
+<b class="salsa-loading-bar salsa-loading-bar-5"></b>
+<b class="salsa-loading-bar salsa-loading-bar-6"></b>
+<b class="salsa-loading-bar salsa-loading-bar-7"></b>
+<b class="salsa-loading-bar salsa-loading-bar-8"></b>
+<b class="salsa-loading-bar salsa-loading-bar-9"></b>
+<b class="salsa-loading-bar salsa-loading-bar-10"></b>
+<b class="salsa-loading-bar salsa-loading-bar-11"></b>
+<b class="salsa-loading-bar salsa-loading-bar-12"></b>
+</b>
+</button>
+<span class="button-alt">
+<a href="https://www.hotelsantacaterina.it/en/availability-request" bis_skin_checked="1">
+Or ask to be sent an offer
+</a>
+</span>
+</div>
+</div>
+</fieldset>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+var calendar_from = new SalsaCalendar({
+inputId: "checkin-search-panel",
+lang: "en",
+range: {
+min: "today"
+},
+calendarPosition: "bottom",
+fixed: false,
+connectCalendar: true
+});
+document.body.store("checkin-search-panel", calendar_from);
+var calendar_to = new SalsaCalendar({
+inputId: "checkout-search-panel",
+lang: "en",
+range: {
+min: "today"
+},
+calendarPosition: "bottom",
+fixed: false
+});
+document.body.store("checkout-search-panel", calendar_to);
+new SalsaCalendar.Connector({
+from: calendar_from,
+to: calendar_to,
+maximumInterval: 21,
+minimumInterval: 1
+});
+new SalsaCalendar.NightsCalculator({
+from: calendar_from,
+to: calendar_to,
+nightsNo: "salsa-booking-nights-no-search-panel"
+});
+window.addEvent("domready", function () {
+document.id('booking-button-search-panel').addEvent('click', function (event) {
+var calendar_from = document.body.retrieve("checkin-search-panel");
+var calendar_to = document.body.retrieve("checkout-search-panel");
+var day_from = calendar_from.getCurrentDate().getDate();
+var day_to = calendar_to.getCurrentDate().getDate();
+var month_from = parseInt(calendar_from.getCurrentDate().getMonth() + 1);
+var month_to = parseInt(calendar_to.getCurrentDate().getMonth() + 1);
+document.id("calArrivalDateFieldsearch-panel").set(
+"value",
+calendar_from.getCurrentDate().getFullYear() + '-' +
+(month_from < 10 ? '0' : '') + month_from + '-' +
+(day_from < 10 ? '0' : '') + day_from
+);
+document.id("calDepartureDateFieldsearch-panel").set(
+"value",
+calendar_to.getCurrentDate().getFullYear() + '-' +
+(month_to < 10 ? '0' : '') + month_to + '-' +
+(day_to < 10 ? '0' : '') + day_to
+);
+var form = document.id("booking-search-form-mail-search-panel");
+var url = form.action + '?' + form.toQueryString();
+window.open(url, '_blank');
+});
+});
+</script>
+</div>
+</div>
+<div class="nav-mobile" bis_skin_checked="1">
+<a href="https://www.hotelsantacaterina.it/en/#" id="nav-mobile-toggler" bis_skin_checked="1">
+<span class="nav-mobile-icon"></span>
+</a>
+<div class="nav-mobile-lang dropdown-container" bis_skin_checked="1">
+<a class="dropdown-button">
+<img alt="*" src="./Hotel Santa Caterina - Amalfi - Amalfi Coast Italy_files/flag-usa.png">
+</a>
+<div class="dropdown-panel" style="display:none;" bis_skin_checked="1">
+<ul>
+<li>
+<a href="https://www.hotelsantacaterina.it/" class="it" bis_skin_checked="1">
+Italiano
+</a>
+</li>
+<li>
+<a href="https://www.hotelsantacaterina.it/en/" class="it" bis_skin_checked="1">
+English
+</a>
+</li>
+</ul>
+</div>
+</div>
+<a href="https://be.synxis.com/?chain=24447&amp;hotel=6801&amp;SRC=30&amp;locale=en-US" target="_blank" class="nav-mobile-book" bis_skin_checked="1">
+Book
+</a>
+<div id="nav-mobile-panel" bis_skin_checked="1">
+<div class="nav" bis_skin_checked="1">
+<ul>
+<li><a href="https://www.hotelsantacaterina.it/en/" class="current" bis_skin_checked="1">Home</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/covid19" bis_skin_checked="1">Covid Protocols</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/info-request" bis_skin_checked="1">Contact</a></li>
+<li><a href="https://be.synxis.com/?chain=24447&amp;hotel=6801&amp;SRC=30&amp;locale=en-US" target="_blank" bis_skin_checked="1">Book</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/rooms-and-suites" bis_skin_checked="1">Rooms &amp; Suites</a></li>
+<li><a href="https://levilledellamarchesa.hotelsantacaterina.it/" target="_blank" bis_skin_checked="1">Le Ville della Marchesa</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/restaurants-and-bar" bis_skin_checked="1">Restaurants &amp; Bar</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/glicine-restaurant" bis_skin_checked="1">Glicine Restaurant</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/beach-club-and-activities" bis_skin_checked="1">Beach Club</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/weddings-and-meetings" bis_skin_checked="1">Weddings</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/wellness" bis_skin_checked="1">Wellness</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/location" bis_skin_checked="1">Location</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/special-offers" bis_skin_checked="1">Special offers</a></li>
+<li><a href="https://www.hotelsantacaterina.it/en/photo-gallery" bis_skin_checked="1">Gallery</a></li>
+</ul>
+</div>
+<ul class="nav-lang">
+<li><a href="https://www.hotelsantacaterina.it/en/" class="current" bis_skin_checked="1">EN</a></li>
+<li><a href="https://www.hotelsantacaterina.it/" bis_skin_checked="1">IT</a></li>
+</ul>
+</div>
+</div>
+<script type="text/javascript">
+window.addEvent('domready', function () {
+if (getSize().x < 1024) {
+var offset = 48;
+} else if (getSize().x < 1270) {
+var offset = 80;
+} else {
+var offset = 60;
+}
+new SalsaDropdown({
+container: ".dropdown-container",
+toggler: ".dropdown-button",
+panel: ".dropdown-panel",
+activeClass: "dropdown-active"
+});
+new SlideoutMenu({
+slideout_menu_toggler_id: "nav-mobile-toggler",
+slideout_menu_panel_id: "nav-mobile-panel",
+header_id: "header",
+wrapper_id: "wrapper",
+panel_width: 240
+});
+new Fx.SmoothScroll({ duration: 700, offset: { 'y': offset * -1 } }, document.id("wrapper"));
+var booking_search_toggler = document.id("booking-search-toggler");
+var booking_search_panel = document.id("booking-search-panel");
+if (booking_search_toggler) {
+booking_search_toggler.addEvent('click', function () {
+booking_search_toggler.toggleClass('booking-search-toggler-active');
+booking_search_panel.toggleClass('booking-search-panel-open');
+});
+}
+});
+salsa_slide('slide-company-info', 'view-company-info');
+</script>
+<script type="text/javascript">
+window.addEvent('domready', function () {
+new SalsaPolicies({
+container: 'salsa-policies-advice',
+advice_view_url: "/salsa_call7ab3?_call=ajax&lang=en&_file=QHNhbHNhL2NvbW1vbi9wb2xpY2llcy9hZHZpY2UuaW5j&_hash=bcf16552169c4e131b0cccfdb5ddb4b1e0b86b555393b57453c9707a8fc60e67&_params=YToxOntzOjQ6ImxhbmciO3M6MjoiZW4iO30"
+});
+});
+</script>
+<div id="salsa-policies-advice" bis_skin_checked="1"></div>
+
+<div id="mbOverlay" style="display: none; opacity: 0;" bis_skin_checked="1"></div><div id="mbCenter" style="display: none;" bis_skin_checked="1"><div id="mbImage" bis_skin_checked="1"></div><div id="mbBottom" style="opacity: 0;" bis_skin_checked="1"><a id="mbCloseLink" href="https://www.hotelsantacaterina.it/en/#" bis_skin_checked="1"></a><a id="mbNextLink" href="https://www.hotelsantacaterina.it/en/#" bis_skin_checked="1"></a><a id="mbPrevLink" href="https://www.hotelsantacaterina.it/en/#" bis_skin_checked="1"></a><div id="mbTitle" bis_skin_checked="1"></div><div id="mbCaption" bis_skin_checked="1"></div><div id="mbNumber" bis_skin_checked="1"></div></div></div></body></html>

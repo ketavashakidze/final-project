@@ -1,0 +1,89 @@
+var ParallaxBox = new Class({
+	cParallaxClass: 'parallaxbox', 	// default class to pick up
+	cParallaxBoxes: [],  			// i.e. the most the image can move is 100px positive should be set to -this in the css too!
+	cMaximumMovement: 100,			// maximum movement of background image in pixels
+	cHeightOfViewPort: 0,			// calculated in the reposition code
+	cScrollPos: 0,					// calculated in the reposition code
+
+	initialize: function(aParallaxClass)
+	{
+		// Check for an overridden class
+		if (typeof(aParallaxClass) != 'undefined') this.cParallaxClass = aParallaxClass;
+
+		// Grab all the parallax items in the current page
+		this.cParallaxBoxes = $$('.' + this.cParallaxClass);
+
+		// Attach the reposition function to the relevant events
+		this.applyEvents();
+
+		// Call an initial run of the reposition function to get things in place
+		this.repositionBackgrounds();
+	},
+
+	applyEvents: function()
+	{
+		// Call the reposition event on a change of scroll position OR a window resize which may affect the height of the page
+		window.addEvent('scroll',function(aEvent) {
+			this.repositionBackgrounds();
+		}.bind(this));
+		window.addEvent('resize',function(aEvent) {
+			this.repositionBackgrounds();
+		}.bind(this));
+	},
+
+	repositionBackgrounds: function()
+	{
+		// Grab window dimensions at this point
+		this.cScrollPos = window.getScroll().y;
+		this.cHeightOfViewPort = window.getSize().y; 
+
+		// Run through each of the activated parallax boxes in turn
+		this.cParallaxBoxes.each(function(aParallaxBox){
+
+			// Grab the background position of this box and make it into an array - grabbing each part individually
+			var aBackgroundPos = 0;
+			var aXpos = 0;
+			var aYpos = 0;
+
+			if (aParallaxBox.getStyle('background-position-y') != '')
+			{
+				aXpos = aParallaxBox.getStyle('background-position-x');
+				aYpos = aParallaxBox.getStyle('background-position-y').replace('px', '').toInt();
+			}
+			else
+			{
+				aBackgroundPos = aParallaxBox.getStyle('background-position').split(" ");
+				aXpos = aBackgroundPos[0];
+				aYpos = aBackgroundPos[1].replace('px', '').toInt();
+			}
+
+			// Grab the height and vertical position of the box
+			var aParallaxBoxHeight = aParallaxBox.getCoordinates().height;
+			var aParallaxBoxYPos = aParallaxBox.getCoordinates().top;
+
+			// Calculate how tall the visible region is for this box
+			var aHeightOfVisibleRegion = this.cHeightOfViewPort + aParallaxBoxHeight; // image in in view for this many pixels 
+			var aDistanceFromTopOfScreenToBottomOfImage = (this.cScrollPos) - (aParallaxBoxYPos + aParallaxBoxHeight); // goes from - 1087 to -3
+				
+			// If the item is visible then actually move it to its new position
+			if ((aDistanceFromTopOfScreenToBottomOfImage < 0) && (aDistanceFromTopOfScreenToBottomOfImage + aHeightOfVisibleRegion > 0))
+			{
+				var aVerticalRatio = 1 + ((this.cScrollPos + aDistanceFromTopOfScreenToBottomOfImage) / aHeightOfVisibleRegion); // Percentage of travel across visible area
+				var aNewPos = -this.cMaximumMovement + (aVerticalRatio * this.cMaximumMovement);
+
+				// Any specific offset to start from?
+				if (aParallaxBox.get('data-offset') != '') aNewPos = aNewPos + parseInt(aParallaxBox.get('data-offset'));
+
+				// Build the new background position string dependent on the direction of movement
+				var aNewPositionString = aXpos + ' ' +  aNewPos + 'px';
+				if (aParallaxBox.get('data-direction') == 'X') aNewPositionString = aNewPos + 'px ' +  aYpos + 'px';
+								
+				// Apply the adjusted background position to the element
+				aParallaxBox.setStyle('background-position', aNewPositionString);
+			}
+		}.bind(this));
+	}
+});
+
+// Apply parallax to any in the screen
+FParallax = new ParallaxBox();
