@@ -1,47 +1,73 @@
 /*header*/
 .nav {display: flex;justify-content: space-between;background-color:white; height: 50px;position: fixed;width: 100%;}
 .nav-ul {display: flex;}
-.nav-li {margin-right: 70px; font-size: 20px;margin-top: 10px; color: #121212;}
+.nav-li {margin-right: 70px; font-size: 20px;margin-top: 10px; font-family: 'Hind', sans-serif;}
+.nav-li :hover {color: black;}
 .box {background-image: url(../images/home-masthead-1.jpg);width:100%;height:550px;}
 .title {font-family: 'Parisienne', cursive; font-size: 35px; margin-top: 10px;}
-.paragraph {font-size: 20px; margin-bottom: 550px;}
+.paragraph {font-size: 20px; margin-bottom: 550px; }
 /*section 2*/
 .booking {background-image: url(../images/Santa-Caterina-Italy.webp);width: 100%;height:150px ;}
 .booking{ display: flex;justify-content: center;align-items: center; margin: 0 auto;margin-top: 50px;}
-.input{;  display: flex; justify-content: center;align-items: center;height:100px ;border-color : #E8E8E8 ; color: #CECECE;margin-bottom: 16px;}
+.input{  display: flex; justify-content: center;align-items: center;height:100px ;border-color : #E8E8E8 ; color: #CECECE;margin-bottom: 16px;}
 .button {width: 150px;height: 50px;  background-color: #ffb5b5; color: white;}
 .input_form {height: 50px;width: 300px;}
 
 /*section1*/
 .aboutus {width: 1104px;height: 560px;margin: 0 auto;display: flex;margin-top: 40px;;}
-.aboutus-text {width: 500px;margin-right:90px;}
-.aboutus-title {font-size: 20px;margin-bottom: 20px; color: #5585b5;}
+.aboutus-text {width: 500px;margin-right:90px; }
+.aboutus-title {font-size: 20px;margin-bottom: 20px; color: #5585b5;font-family: 'Hind', sans-serif;}
 .title2 {font-size: 30px;margin-bottom: 15px;}
-.aboutus-paragraph {font-size: 20px;}
+.aboutus-paragraph {font-size: 20px;font-family: 'Quicksand', sans-serif;}
 .aboutus-img1 {margin-right: 20px;margin-bottom: 20px;}
-
+.line {width: 100px;}
 /* services */
 .service {display: flex;width:400px;}
 .services {width: 1100px;display: flex;justify-content: space-between; margin: 0 auto ;margin-top: 20px;}
 .service1 {display: flex;width: 400px;}
 .services-section2  {width: 1100px;display: flex;justify-content:space-between; margin: 0 auto ;}
-.text {width: 500px;font-size: 20px; margin-bottom: 30px;}
+.text {width: 500px;font-size: 20px; margin-bottom: 30px; font-family: 'Quicksand', sans-serif;}
 .title3 { font-size: 20px; color: #5585b5;}
-.service-name { margin-top: 10px; margin-bottom: 30px;font-size: 40px;}
+.service-name { margin-top: 10px; margin-bottom: 30px;font-size: 40px;font-family: 'Hind', sans-serif;}
 .service-icon {font-size: 40px; margin-top: 10px;margin-bottom: 30px;margin-right: 10px;}
 .service-title {width: 1100px;margin: 0 auto; margin-top: 70px;}
 
 /* rooms */
 .rooms {display: flex;}
-.room-text {width: 500px; color: white; font-size: 30px;}
+.room-text {width: 500px; color: white; font-size: 20px;font-family: 'Quicksand', sans-serif;}
 .container {width: 1300px; margin: 0 auto;}
 .text-box {width: 600px;height: 600px;background-color:#363636;}
+.room-name {color: white;font-size: 30px; margin-bottom: 20px; font-family: 'Hind', sans-serif;}
+.arrow {font-size: 20px;color: #ffc93c;}
+.room-ul {font-size: 20px;color: white;}
+.room-title {font-size: 30px;color:#ffc93c; margin-bottom: 20px;font-family: 'Hind', sans-serif;}
+.room-li {margin-bottom: 20px;}
+
+/* restaurants */
+.container-bar  {width: 1400px;margin: 0 auto; }
+.resto-title {font-size: 40px;justify-content: center;justify-items: center;font-family: 'Hind', sans-serif; color:  #79d1c3 ;}
+.resto-box {display: flex; margin-bottom: 30px; background-color: #eaf6f6;}
+.resto-text {width: 600px;font-size: 20px; margin-right: 100px;font-family: 'Quicksand', sans-serif;}
+.input-resto {height:100px ;border-color : #E8E8E8 ; color: #CECECE;}
+.resto-title {margin-top: 100px;margin-bottom: 30px;font-family: 'Hind', sans-serif;}
+.resto-name {margin-bottom: 20px;font-family: 'Hind', sans-serif; margin-top: 30px;}
+.input-resto {margin-top: 50px;}
+.resto-btn {font-size: 20px;}
+ /* contact */
+ .wraper {width: 1100px;height: 670px;margin: 0 auto;}
+.input_textarea {
+   width: 1100px; ; height: 288px;resize: none;border-color: #E8E8E8;background-color: #F8F8F8; color: #CECECE;}
+
+.input_form {width: 250px;height: 60px;border-color: #E8E8E8 ; background-color : #F8F8F8 ; color: #CECECE;margin-bottom: 16px;}
+.header2 {margin-bottom: 50px ; font-size: 25px;margin-top: 20px;}
+.button {width: 250px;height: 50px; background-color: #5863F8; color: white;}
+.header1 {margin-top: 60px;}
 
 
 /*footer*/
 .footer-wraper {width: 100%;height: 393px;background-color: #121212;display: flex;}
-.header5 {color: white;}
-.footer-text {color: white; margin-top: 20px;}
+.header5 {color: white; font-size: 30px;}
+
 .footer-block {max-width: 260px;height: 191px; margin: 90px 200px 114px 140px}
 .fa-brands {margin-top: 20px; margin-left: 10px;}
 .fa-facebook {color: #3B5998; font-size: 35px;}
@@ -51,6 +77,7 @@
 .block {color: white; margin-top: 90px;margin-left: 90px;}
 .footer-ul {color: #5863F8 ; }
 .footer-li {margin-bottom: 10px ;}
+
 
 
 

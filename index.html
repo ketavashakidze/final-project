@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
 </head>
 <body>
     <header id="home ">
@@ -18,7 +20,7 @@
                 <ul class="nav-ul">
                     <li class="nav-li" ><a href="#home">Home</a></li>
                     <li class="nav-li"> <a href="#services">Services</a></li>
-                    <li class="nav-li"><a href="#Rooms">Rooms&Suites</a></li>
+                    <li class="nav-li"><a href="#rooms">Rooms&Suites</a></li>
                     <li class="nav-li"><a href="#restaurants">Restaurants&Bars</a></li>
                     <li class="nav-li"><a href="#contact">Contact</a></li>
                     
@@ -35,7 +37,7 @@
     </header>
    
     <!-- about us -->
-    <section >
+    <section id="home">
         <div class="aboutus">
             <div class="aboutus-text">
             <h4 class="aboutus-title">about us</h4>
@@ -132,24 +134,25 @@
        <!-- rooms -->
        <section id="rooms">
         <div class="container">
-           <h2>rooms</h2>
+           <h2 class="room-title">Rooms&Suites</h2>
+            
            
            <div class="rooms">
                <img src="images/img1.jpg" alt="bedroom image">
                <div class="text-box">
-               <h3>STANDART ROOM</h3>
-               <ul>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+               <h3 class="room-name">STANDART ROOM</h3>
+               <ul class="room-ul">
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Wi-fi
                 </li>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Air conditioner
                 </li>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Mini bar
                 </li>
             </ul>
                <P class="room-text">With our Standard Room, you will have everything you need for a comfortable stay and a good night’s sleep. Enjoy the large bed, in-room coffee and tea facilities, and free Wi-Fi. Other services include a magnifying mirror and a hairdryer. Choose between double or twin beds.
@@ -160,19 +163,19 @@
            <div class="rooms">
                
                <div class="text-box">
-               <h3>SUPERIOR ROOM </h3>
-               <ul>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+               <h3 class="room-name">SUPERIOR ROOM </h3>
+               <ul class="room-ul">
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Wi-fi
                 </li>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Air conditioner
                 </li>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Mini bar
                 </li>
             </ul>
                <p class="room-text">For extra space, book one of our Superior Rooms. With the in-room espresso machine, there’s no reason to wait for your first cup of coffee. Everything you need is already in the room. Whether you prefer twin, queen, or king beds, we guarantee an exceptional level of comfort.</p>
@@ -182,19 +185,19 @@
            <div class="rooms">
                <img src="images/img3.jpg" alt="bedroom image">
                <div class="text-box">
-               <h3>PREMIUM ROOM</h3>
-               <ul>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+               <h3 class="room-name">PREMIUM ROOM</h3>
+               <ul class="room-ul">
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Wi-fi
                 </li>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Air conditioner
                 </li>
-                <li>
-                    <i class = "fas fa-arrow-alt-circle-right"></i>
-                    Lorem ipsum dolor sit amet.
+                <li class="room-li">
+                    <i class = "fas fa-arrow-alt-circle-right arrow"></i>
+                    Mini bar
                 </li>
             </ul>
                <p class="room-text">Our Premium Rooms are ideal if you enjoy spacious surroundings. They include the same amenities as the Superior Rooms, while also offering more space for extra comfort.</p>
@@ -205,49 +208,90 @@
        
        <!-- restaurants -->
        <section id="restaurants">
-        <div>
-           <div>
+        <div class="container-bar">
+           
                <div>
-                   <h2>RESTAURANTS&BARS</h2>
+                   <h2 class="resto-title">RESTAURANTS&BARS</h2>
                </div>
+               <div class="resto-box"> 
                <img src="images/94_b.jpg" alt="restaurant image">
-               <div>
-                   <h2>GLICINE RESTAURANT</h2>
-                   <p>Awarded a Michelin Star by Michelin Guide 2020, offers a panoramic terrace with a breath-taking view.
+               <div class="resto-text">
+                   <h2 class="resto-name">GLICINE RESTAURANT</h2>
+                   <p class="resto-paragraph">Awarded a Michelin Star by Michelin Guide 2020, offers a panoramic terrace with a breath-taking view.
                     A new fine dining concept, proposes a cuisine focused on local recipes and Mediterranean flavours, proposing balanced, elegant and innovative dishes.</p>
+                    <div class="input-resto">
+                        <button class="resto-btn" type="submit">BOOK A TABLE</button> </div>
                </div>
+               
+               
            </div>
-            <div>
-                <div>
-                    <h2>LA TERRAZZA BAR</h2>
-                    <p>Whether for an aperitif amongst friends, a light snack before heading to the beach, or a romantic after dinner drink it seems the most natural thing in the world to enjoy these leisurely moments with its welcoming environment  and vast selection of cocktails and home-made lemon liqueurs, served with an inviting selection of warm and cold canapés.</p>
+            
+                <div  class="resto-box">
+                    <div class="resto-text">
+                    <h2 class="resto-name">LA TERRAZZA BAR</h2>
+                    <p class="resto-paragraph">Whether for an aperitif amongst friends, a light snack before heading to the beach, or a romantic after dinner drink it seems the most natural thing in the world to enjoy these leisurely moments with its welcoming environment  and vast selection of cocktails and home-made lemon liqueurs, served with an inviting selection of warm and cold canapés.</p>
+                    <div class="input-resto">
+                        <button class="resto-btn" type="submit">BOOK A TABLE</button> </div>
                 </div>
                 <img src="images/resto.jpg" alt="restaurant image">
             </div>
-            <div>
+            <div class="resto-box">
                 <img src="images/night.jpg" alt="restaurant image">
-                <div>
-                    <h2>RESTAURANT AL MARE</h2>
-                    <p>lunch and dinner are served also at the Beach Club’s Restaurant Al Mare, restaurant positioned on a perched terrace Fresh grilled fish and fragrant pizzas cooked in the traditional wood burning oven are the specialties of an informal meal, surrounded by the spectacular scenery </p>
+                <div class="resto-text">
+                    <h2 class="resto-name">RESTAURANT AL MARE</h2>
+                    <p class="resto-paragraph">lunch and dinner are served also at the Beach Club’s Restaurant Al Mare, restaurant positioned on a perched terrace Fresh grilled fish and fragrant pizzas cooked in the traditional wood burning oven are the specialties of an informal meal, surrounded by the spectacular scenery </p>
+                    <div class="input-resto">
+                        <button class="resto-btn" type="submit">BOOK A TABLE</button> </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <h2>WINE CELLAR</h2>
-                    <p>Santa Caterina's well stocked wine cellar will delight lovers of Bacchus' favorite tipple, with its excellent selection of all the most highly acclaimed regional, Italian and international wines, wines to be savored as an accompaniment to the chef's specialties or to take home either as a gift or as a souvenir of the pleasurable moments</p>
+            <div class="resto-box">
+                <div class="resto-text">
+                    <h2 class="resto-name">WINE CELLAR</h2>
+                    <p class="resto-paragraph">Santa Caterina's well stocked wine cellar will delight lovers of Bacchus' favorite tipple, with its excellent selection of all the most highly acclaimed regional, Italian and international wines, wines to be savored as an accompaniment to the chef's specialties or to take home either as a gift or as a souvenir of the pleasurable moments</p>
+                    <div class="input-resto">
+                        <button class="resto-btn" type="submit">BOOK A TABLE</button> </div>
                 </div>
+                
                 <img src="images/wine.jpg" alt="image">
             </div>
         </div>
        </section>
-       contact
-       
+       <!-- contact -->
+       <section class="wraper">
+         
+        <div>
+            <h4 class="header1">INFORMATION REQUEST</h4>
+            <h2 class="header2">Our staff is available for anything you may need. If you have any questions, please fill out the form below or call +111 1111 111.</h2>
+        </div>
+        <form class="form" action="">
+        <div class="input-form">
+           <textarea class="input_textarea" name="your-review" id="review" placeholder="description">message </textarea>
+        </div>
+        <div class="input">
+        <div class="input-form">
+            <input class="input_form" type="text" id="subject" name="input-subject" placeholder="subject" >
+
+        </div>
+        <div class="input-form">
+           <input class="input_form" type="text" id="name" name="input-name" placeholder="Name/Surname" required>
+        </div>
+        <div class="input-form">
+            <input class="input_form" type="text" id="email" name="input-email" placeholder="email">
+        </div>
+        <div class="input-form">
+            <button class="button" type="submit">send</button>
             
-    
-        <footer  class="footer-wraper">
+        </div>
+       </div>
+       </form>
+      
+        </section>
+       <!-- end of contact -->
+       <!-- footer -->
+            <footer  class="footer-wraper">
             <div class="footer-block">
-                <h3 class="header5">Zetta Hotels</h3>
-                <p class=footer-text>Our hotel is an image of quality and profesionalism combined with hard work and precision. You can expect only the best services from our staff.</p>
+                <h3 class="header5">Santa Catarina</h3>
+                
                 <i class="fa-brands fa-facebook"></i>
                 <i class="fa-brands fa-twitter"></i>
                 <i class="fa-brands fa-google-plus"></i>
@@ -258,7 +302,7 @@
                     <li class="footer-li">blog</li>
                     <li class="footer-li">rooms</li>
                     <li class="footer-li">gift card</li>
-                    <li class="footer-li">testimonials</li>
+                    
                 </ul>
             </div>
             <div class="block">
@@ -273,9 +317,9 @@
             <div class="block">
                 <h4>contact info</h4>
                 <ul>
-                    <li> <i class="fa-regular fa-envelope"></i> example@yahoo.com</li>
-                    <li> <i class="fa-solid fa-phone"></i> +0320 422 4254</li>
-                    <li> <i class="fa-solid fa-location-dot"></i> main str chicago ilinois</li>
+                    <li> <i class="fa-regular fa-envelope"></i> example@gmail.com</li>
+                    <li> <i class="fa-solid fa-phone"></i> +77777777</li>
+                    <li> <i class="fa-solid fa-location-dot"></i>italy</li>
                 </ul>
             </div>
         </footer>
